@@ -40,6 +40,7 @@ app.get('/', (req, res) => {
 });
 
 // parse application/json
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
 let pool;
@@ -70,51 +71,208 @@ app.route('/tests/:city')
     }
 
     const cities = await cityQuery;
-    res.status(200).send(cities).end();
+    res.status(200).json({data: cities}).end();
   });
 
+app.route('/get/user/:user_id')
+  .get(async (req, res) => {
+    // [START cloud_sql_mysql_mysql_connection]
+    try {
+        const stmt = `
+          SELECT * FROM users
+          WHERE id = ?
+          LIMIT 1
+        `;
+        // Pool.query automatically checks out, uses, and releases a connection
+        // back into the pool, ensuring it is always returned successfully.
+        const userQuery = pool.query(stmt, [req.params.user_id]);
 
-  app.route('/get/posts')
-    .get(async (req, res) => {
-      // [START cloud_sql_mysql_mysql_connection]
-      try {
-          // No pagination for now because I'm lazy.
-          const postStmt = 'SELECT * FROM posts';
-          // Pool.query automatically checks out, uses, and releases a connection
-          // back into the pool, ensuring it is always returned successfully.
-          postsQuery = pool.query(postStmt);
+        // Organize comments into field in each post.
+        const user = await userQuery;
+        // [END cloud_sql_mysql_mysql_connection]
 
-          const commentStmt = 'SELECT * FROM comments';
-          commentsQuery = pool.query(commentStmt);
-
-          // Organize comments into field in each post.
-          const posts = await postQuery;
-          const comments = await commentsQuery;
-          const updatedPosts = posts.map(function(post) {
-            post["comments"] = comments.filter((comment) => {
-              comment.post_id == post.id;
-            })
-            return post;
-          });
-
-
-          // [END cloud_sql_mysql_mysql_connection]
-          res.status(200).json({data: updatedPosts}).end();
-
-      } catch (err) {
-          // If something goes wrong, handle the error in this section. This might
-          // involve retrying or adjusting parameters depending on the situation.
-          // [START_EXCLUDE]
-          logger.error(err);
-          return res
+        if (user.length == 0) {
+          res
           .status(500)
           .json(
-              {message: 'Unable to successfully get posts!'}
+              {message: 'User not found!'}
           )
           .end();
-          // [END_EXCLUDE]
-      }
-  });
+        } else {
+          res.status(200).json({data: user[0]}).end();
+
+        }
+
+    } catch (err) {
+        // If something goes wrong, handle the error in this section. This might
+        // involve retrying or adjusting parameters depending on the situation.
+        // [START_EXCLUDE]
+        logger.error(err);
+        return res
+        .status(500)
+        .json(
+            {message: 'Unable to successfully get user!'}
+        )
+        .end();
+        // [END_EXCLUDE]
+    }
+
+  })
+
+
+app.route('/get/user_by_email/:user_email')
+  .get(async (req, res) => {
+    // [START cloud_sql_mysql_mysql_connection]
+    try {
+        const stmt = `
+          SELECT * FROM users
+          WHERE email = ?
+          LIMIT 1
+        `;
+        // Pool.query automatically checks out, uses, and releases a connection
+        // back into the pool, ensuring it is always returned successfully.
+        const userQuery = pool.query(stmt, [req.params.user_email]);
+
+        // Organize comments into field in each post.
+        const user = await userQuery;
+        // [END cloud_sql_mysql_mysql_connection]
+
+        if (user.length == 0) {
+          res
+          .status(500)
+          .json(
+              {message: 'User not found!'}
+          )
+          .end();
+        } else {
+          res.status(200).json({data: user[0]}).end();
+
+        }
+
+    } catch (err) {
+        // If something goes wrong, handle the error in this section. This might
+        // involve retrying or adjusting parameters depending on the situation.
+        // [START_EXCLUDE]
+        logger.error(err);
+        return res
+        .status(500)
+        .json(
+            {message: 'Unable to successfully get user!'}
+        )
+        .end();
+        // [END_EXCLUDE]
+    }
+
+  })
+
+
+app.route('/get/faved_posts/:user_id')
+  .get(async (req, res) => {
+    // [START cloud_sql_mysql_mysql_connection]
+    try {
+        // No pagination for now because I'm lazy.
+        const postStmt = `
+          SELECT posts.* FROM posts
+          INNER JOIN post_favs ON posts.id = post_favs.post_id
+          WHERE posts.removed = FALSE AND post_favs.unfaved = FALSE AND post_favs.user_id = ?
+        `;
+        // Pool.query automatically checks out, uses, and releases a connection
+        // back into the pool, ensuring it is always returned successfully.
+        const postsQuery = pool.query(postStmt, [req.params.user_id]);
+
+        const commentStmt = `
+        SELECT comments.*, star_count FROM comments 
+        INNER JOIN post_favs ON comments.post_id = post_favs.post_id
+        JOIN (
+          SELECT comment_id, COUNT(*) as star_count
+          FROM comment_likes
+          WHERE unstared = FALSE
+          GROUP BY comment_id
+        ) like_stat
+        ON like_stat.comment_id = comments.id
+        WHERE removed = FALSE AND post_favs.unfaved = FALSE AND post_favs.user_id = ?`;
+        const commentsQuery = pool.query(commentStmt, [req.params.user_id]);
+
+        // Organize comments into field in each post.
+        const posts = await postsQuery;
+        const comments = await commentsQuery;
+        const updatedPosts = posts.map(function(post) {
+          post["comments"] = comments.filter((comment) => {
+            return comment.post_id == post.id;
+          })
+          return post;
+        });
+
+        // [END cloud_sql_mysql_mysql_connection]
+        res.status(200).json({data: updatedPosts}).end();
+
+    } catch (err) {
+        // If something goes wrong, handle the error in this section. This might
+        // involve retrying or adjusting parameters depending on the situation.
+        // [START_EXCLUDE]
+        logger.error(err);
+        return res
+        .status(500)
+        .json(
+            {message: 'Unable to successfully get posts!'}
+        )
+        .end();
+        // [END_EXCLUDE]
+    }
+
+  })
+
+app.route('/get/posts')
+  .get(async (req, res) => {
+    // [START cloud_sql_mysql_mysql_connection]
+    try {
+        // No pagination for now because I'm lazy.
+        const postStmt = 'SELECT * FROM `posts` WHERE removed = FALSE';
+        // Pool.query automatically checks out, uses, and releases a connection
+        // back into the pool, ensuring it is always returned successfully.
+        const postsQuery = pool.query(postStmt);
+
+        const commentStmt = `
+          SELECT comments.*, star_count FROM comments
+          JOIN (
+            SELECT comment_id, COUNT(*) as star_count
+            FROM comment_likes
+            WHERE unstared = FALSE
+            GROUP BY comment_id
+          ) like_stat
+          ON like_stat.comment_id = comments.id
+          WHERE removed = FALSE
+        `;
+        const commentsQuery = pool.query(commentStmt);
+
+        // Organize comments into field in each post.
+        const posts = await postsQuery;
+        const comments = await commentsQuery;
+        const updatedPosts = posts.map(function(post) {
+          post["comments"] = comments.filter((comment) => {
+            return comment.post_id == post.id;
+          })
+          return post;
+        });
+
+
+        // [END cloud_sql_mysql_mysql_connection]
+        res.status(200).json({data: updatedPosts}).end();
+
+    } catch (err) {
+        // If something goes wrong, handle the error in this section. This might
+        // involve retrying or adjusting parameters depending on the situation.
+        // [START_EXCLUDE]
+        logger.error(err);
+        return res
+        .status(500)
+        .json(
+            {message: 'Unable to successfully get posts!'}
+        )
+        .end();
+        // [END_EXCLUDE]
+    }
+});
 
 app.route('/add/:city-:country')
   .get(async (req, res) => {
@@ -145,7 +303,7 @@ app.route('/add/:city-:country')
   });
 
 
-  app.route('/insert/user')
+app.route('/insert/user')
   .post(async (req, res) => {
     const params = req.body;
     // [START cloud_sql_mysql_mysql_connection]
@@ -173,6 +331,33 @@ app.route('/add/:city-:country')
 
 });
 
+
+app.route('/insert/post')
+  .post(async (req, res) => {
+    const params = req.body;
+    // [START cloud_sql_mysql_mysql_connection]
+    try {
+        const stmt = 'INSERT INTO posts (user_id, text, timestamp) values (?, ?, NOW())';
+        // Pool.query automatically checks out, uses, and releases a connection
+        // back into the pool, ensuring it is always returned successfully.
+        await pool.query(stmt, [params.user_id, params.text]);
+    } catch (err) {
+        // If something goes wrong, handle the error in this section. This might
+        // involve retrying or adjusting parameters depending on the situation.
+        // [START_EXCLUDE]
+        logger.error(err);
+        return res
+        .status(500)
+        .json(
+            {message: 'Unable to successfully add post!'}
+        )
+        .end();
+        // [END_EXCLUDE]
+    }
+
+    // [END cloud_sql_mysql_mysql_connection]
+    res.status(200).json({message: `Successfully added post ${params.text}`}).end();
+});
 
 
 // Start the server
