@@ -17,6 +17,7 @@
 // [START gae_node_request_example]
 const cors = require('cors');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const poolPromise = require('./database');
 
@@ -39,7 +40,7 @@ app.get('/', (req, res) => {
 });
 
 // parse application/json
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 let pool;
 app.use(async (req, res, next) => {
@@ -108,7 +109,7 @@ app.route('/tests/:city')
           return res
           .status(500)
           .json(
-              {message: 'Unable to successfully add user!'}
+              {message: 'Unable to successfully get posts!'}
           )
           .end();
           // [END_EXCLUDE]
