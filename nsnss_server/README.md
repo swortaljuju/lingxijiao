@@ -1,38 +1,117 @@
-# Quickstart for Node.js in the App Engine standard environment
+# Server descriptiion
 
-This is the sample application for the
-[Quickstart for Node.js in the App Engine standard environment][tutorial]
-tutorial found in the [Google App Engine Node.js standard environment][appengine]
-documentation.
+## Tables
 
-* [Setup](#setup)
-* [Running locally](#running-locally)
-* [Deploying to App Engine](#deploying-to-app-engine)
-* [Running the tests](#running-the-tests)
+### users
+- id
+- nickname (won't be displayed)
+- avatar
+- contact_info # to be revealed
+- email # used for contact by the team
 
-## Setup
+```
+CREATE TABLE users (
+     id INT NOT NULL AUTO_INCREMENT,
+     nickname VARCHAR(30) DEFAULT '', -- Should not be displayed
+     avatar SMALLINT DEFAULT 0,
+     contact_info TEXT DEFAULT '',
+     email VARCHAR(200) NOT NULL,
+     PRIMARY KEY (id)
+);
 
-Before you can run or deploy the sample, you need to do the following:
+INSERT INTO users (nickname, avatar, contact_info, email) values ("root", 0, "QQ: 123", "root@root.com");
+INSERT INTO users (nickname, avatar, contact_info, email) values ("admin", 1, "QQ: 321", "admin@root.com");
+```
 
-1.  Refer to the [appengine/README.md][readme] file for instructions on
-    running and deploying.
-1.  Install dependencies:
+### posts
+- id
+- user_id
+- text
+- timestamp
+- pinned
+- removed
+- remove_timestamp
 
-        npm install
+```
+CREATE TABLE posts (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	text TEXT,
+	timestamp TIMESTAMP NOT NULL,
+	pinned BOOLEAN DEFAULT FALSE,
+	removed BOOLEAN DEFAULT FALSE,
+	remove_timestamp TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id)
+);
 
-## Running locally
+INSERT INTO posts (user_id, text, timestamp) values (1, "天若有情天亦老", NOW());
+```
 
-    npm start
+### comments
+- id
+- user_id
+- text
+- timestamp
+- post_id
+- removed
+- remove_timestamp
 
-## Deploying to App Engine
+```
+CREATE TABLE comments (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	text TEXT,
+	timestamp TIMESTAMP NOT NULL,
+	post_id INT NOT NULL,
+	removed BOOLEAN DEFAULT FALSE,
+	remove_timestamp TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id)
+);
 
-    gcloud app deploy
+INSERT INTO comments (user_id, text, timestamp, post_id) values (2, "月如无恨月长圆", NOW(), 1);
+```
 
-## Running the tests
+### comment_likes
+- id
+- comment_id
+- user_id
+- timestamp
+- unstared
+- unstar_timestamp
 
-See [Contributing][contributing].
+```
+CREATE TABLE comment_likes (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	timestamp TIMESTAMP NOT NULL,
+	comment_id INT NOT NULL,
+	unstared BOOLEAN DEFAULT FALSE,
+	unstar_timestamp TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id)
+);
 
-[appengine]: https://cloud.google.com/appengine/docs/standard/nodejs
-[tutorial]: https://cloud.google.com/appengine/docs/standard/nodejs/quickstart
-[readme]: ../../README.md
-[contributing]: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/CONTRIBUTING.md
+INSERT INTO comment_likes (user_id, timestamp, comment_id) values (1, NOW(), 1);
+```
+
+
+### post_favs
+- id
+- post_id
+- user_id
+- timestamp
+- unfaved
+- unfav_timestamp
+
+```
+CREATE TABLE post_favs (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	timestamp TIMESTAMP NOT NULL,
+	post_id INT NOT NULL,
+	unfaved BOOLEAN DEFAULT FALSE,
+	unfav_timestamp TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO post_favs (user_id, timestamp, post_id) values (2, NOW(), 1);
+```
