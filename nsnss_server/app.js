@@ -49,6 +49,36 @@ async function audience() {
   return aud;
 }
 
+async function getUserIdByEmail(user_email) {
+  try {
+      const stmt = `
+        SELECT id FROM users
+        WHERE email = ?
+        LIMIT 1
+      `;
+      // Pool.query automatically checks out, uses, and releases a connection
+      // back into the pool, ensuring it is always returned successfully.
+      const userQuery = pool.query(stmt, [user_email]);
+
+      // Organize comments into field in each post.
+      const user = await userQuery;
+      // [END cloud_sql_mysql_mysql_connection]
+
+      if (user.length == 0) {
+        return null;
+      } else {
+        return user[0].id;
+      }
+
+  } catch (err) {
+      // If something goes wrong, handle the error in this section. This might
+      // involve retrying or adjusting parameters depending on the situation.
+      // [START_EXCLUDE]
+      logger.error(err);
+      return null;
+  }
+}
+
 app.use(cors());
 app.options('*', cors());
 
@@ -101,15 +131,17 @@ async function validateAssertion(assertion) {
 app.get('/', async (req, res) => {
   const assertion = req.header('X-Goog-IAP-JWT-Assertion');
   let email = 'None';
+  let sub = 'None';
   try {
     const info = await validateAssertion(assertion);
     email = info.email;
+    sub = info.sub;
   } catch (error) {
     console.log(error);
   }
   res
     .status(200)
-    .send(`Hello ${email}`)
+    .send(`Hello ${email} : ${sub}`)
     .end();
 });
 
@@ -396,12 +428,23 @@ app.route('/add/:city-:country')
 app.route('/insert/user')
   .post(async (req, res) => {
     const params = req.body;
+
+    const user_id = await getUserIdByEmail(params.email);
+
     // [START cloud_sql_mysql_mysql_connection]
     try {
+
+      if (user_id == null) {
         const stmt = 'INSERT INTO users (nickname, avatar, contact_info, email) values (?, ?, ?, ?)';
         // Pool.query automatically checks out, uses, and releases a connection
         // back into the pool, ensuring it is always returned successfully.
         await pool.query(stmt, [params.nickname, params.avatar, params.contact_info, params.email]);
+      } else {
+        const stmt = 'UPDATE `users` SET nickname = ?, avatar = ?, contact_info = ? WHERE id = ?';
+        // Pool.query automatically checks out, uses, and releases a connection
+        // back into the pool, ensuring it is always returned successfully.
+        await pool.query(stmt, [params.nickname, params.avatar, params.contact_info, user_id]);        
+      }
     } catch (err) {
         // If something goes wrong, handle the error in this section. This might
         // involve retrying or adjusting parameters depending on the situation.
@@ -415,7 +458,6 @@ app.route('/insert/user')
         .end();
         // [END_EXCLUDE]
     }
-
     // [END cloud_sql_mysql_mysql_connection]
     res.status(200).json({message: `Successfully added user ${params.email}`}).end();
 
