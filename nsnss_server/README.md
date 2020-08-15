@@ -5,7 +5,12 @@ Follow nodejs quick start guide: https://developers.google.com/gmail/api/quickst
 
 And get `credentials.json`, the first time, will be prompted to provide authorization on server console.
 
-Need to safeguard this API carefully. To be honest, I don't think it should be accessed from outside.
+Currently the service can be used by sending payload to `/send_email`:
+```
+{"sender": "yy@gmail.com", "receiver": "xx@gmail.com", "title": "你好", "content": "世界"}
+```
+
+When the service is actually launched, we should disable this API and only use the send email function internally.
 
 ## Tables
 
