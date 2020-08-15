@@ -5,7 +5,7 @@ Follow nodejs quick start guide: https://developers.google.com/gmail/api/quickst
 
 And get `credentials.json`, the first time, will be prompted to provide authorization on server console.
 
-Need to safeguard this API carefully.
+Need to safeguard this API carefully. To be honest, I don't think it should be accessed from outside.
 
 ## Tables
 
