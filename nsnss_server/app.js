@@ -22,6 +22,8 @@ const {OAuth2Client} = require('google-auth-library');
 const bodyParser = require('body-parser');
 
 const poolPromise = require('./database');
+const Gmail = require('./gmail');
+const gmail_client = new Gmail();
 
 // Create a Winston logger that streams to Stackdriver Logging.
 const winston = require('winston');
@@ -144,6 +146,22 @@ app.get('/', async (req, res) => {
     .send(`Hello ${email} : ${sub}`)
     .end();
 });
+
+
+app.route('/send_email')
+  .post(async (req, res) => {
+    const params = req.body;
+
+    gmail_client.executeGmailAction(
+      gmail_client.sendEmail(
+        res,
+        params.receiver,
+        params.sender, 
+        params.title,
+        params.content
+      )
+    );
+  });
 
 app.route('/tests/:city')
   .get(async (req, res) => {

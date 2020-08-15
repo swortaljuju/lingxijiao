@@ -1,5 +1,12 @@
 # Server descriptiion
 
+## How to enable email service
+Follow nodejs quick start guide: https://developers.google.com/gmail/api/quickstart/nodejs
+
+And get `credentials.json`, the first time, will be prompted to provide authorization on server console.
+
+Need to safeguard this API carefully.
+
 ## Tables
 
 ### users
