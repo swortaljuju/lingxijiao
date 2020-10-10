@@ -101,10 +101,10 @@ Since Mongodb has a tight relationship with Javascript, we use Nodejs as backend
 We use TypeScript as the only programming language. TypeScript is typed Javascript whose types check feature could make our code clean and robust. 
 
 ## UX Design
-![posts list](/assets/images/ux_1.png)
+![posts list](./assets/images/ux_1.png)
 The menu button is a button which will show a left menu bar containing less important items such as personal profile, feedback link and so on.  
 We do lazy loading of posts and show posts on scroll.
-![create post](/assets/images/ux_2.png)
+![create post](./assets/images/ux_2.png)
 
 ## Frontend
 We use Web based technology because
