@@ -11,13 +11,6 @@ Setup Vscode and load the `launch.json` into workspace configuration. Then just 
 
 **Linter**: Vscode's tslint.
 
-**Start server in dev mode**  
-    npm run start-dev  
-
-**Start server in prod mode**  
-    npm run start-prod  
-
-
 ## Mongodb:
 **Version**: 4.4  
 [Installation guide](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)  
