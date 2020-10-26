@@ -6,15 +6,15 @@
     "configurations": [
         {
             "name": "Launch ts",
-            "program": "${workspaceFolder}/index.ts",
+            "program": "${workspaceFolder}/src/index.ts",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "npm: build-dev",
             "type": "pwa-node",
             "outFiles": [
-                "${workspaceFolder}/out/*.js"
+                "${workspaceFolder}/dist/*.js"
             ]
         },
     ]
