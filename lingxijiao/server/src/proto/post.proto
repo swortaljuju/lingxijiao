@@ -1,0 +1,11 @@
+// Post data sent between frontend and backend for both get and create.
+message Narration {
+    required string label = 1;
+    required string content = 2;
+}
+
+message Post {
+    optional string post_id = 1;
+    repeated Narration narrations = 2;
+    repeated string questions = 3;
+}

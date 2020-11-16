@@ -1,0 +1,9 @@
+message QuestionAndAnswer {
+    required string question = 1;
+    required string answer = 2;
+}
+
+message Response {
+    required string post_id = 1;
+    repeated QuestionAndAnswer questionAndAnswers =2;   
+}

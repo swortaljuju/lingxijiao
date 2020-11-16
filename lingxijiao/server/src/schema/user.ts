@@ -10,7 +10,7 @@ export enum Gender {
 
 /** A user */
 export class User {
-    @prop({unique: true, required: true})
+    @prop({unique: true, required: true, index: true})
     public email!: String;
 
     @prop({unique: true, required: true, enum: Gender})

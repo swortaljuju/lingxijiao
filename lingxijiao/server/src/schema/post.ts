@@ -32,7 +32,7 @@ export class Post extends TimeStamps {
     public questions!: string[];
 
     @prop({type: Response})
-    public responses!: Response[];
+    public responses!: PostResponse[];
 }
 
 export const PostModel = getModelForClass(Post);
