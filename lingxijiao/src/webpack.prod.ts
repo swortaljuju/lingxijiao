@@ -9,7 +9,7 @@ const prodConfig: webpack.Configuration = merge(commonConfig, {
   plugins: [
     new CopyPlugin({
       patterns: [
-        path.resolve(__dirname, '.env'),
+        path.resolve(__dirname, 'server', '.env'),
       ],
     }),
   ],

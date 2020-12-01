@@ -6,8 +6,8 @@ import * as path from 'path';
 import {PostModel} from './schema/post';
 // eslint-disable-next-line no-unused-vars
 import {UserModel} from './schema/user';
-import {Post} from './proto/post.js';
-import {Response} from './proto/response.js';
+import {Post} from '../proto/post.js';
+import {Response} from '../proto/response.js';
 
 dotenv.config({
   path: path.resolve(__dirname, '.env'),

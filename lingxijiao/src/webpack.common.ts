@@ -5,7 +5,7 @@ import {WebpackProtobufComiplerPlugin} from './webpack_protobuf_plugin';
 
 export const OUTPUT_DIR = path.resolve(__dirname, 'dist');
 export const commonConfig: webpack.Configuration = {
-  entry: path.resolve(__dirname, 'src', 'index.ts'),
+  entry: path.resolve(__dirname, 'server', 'index.ts'),
   output: {
     path: OUTPUT_DIR,
     filename: 'index.js',

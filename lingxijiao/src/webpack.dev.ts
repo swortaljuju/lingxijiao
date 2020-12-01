@@ -11,7 +11,7 @@ const devConfig: webpack.Configuration = merge(commonConfig, {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, '.env.dev'),
+          from: path.resolve(__dirname, 'server', '.env.dev'),
           to: path.resolve(OUTPUT_DIR, '.env'),
           toType: 'file',
         },

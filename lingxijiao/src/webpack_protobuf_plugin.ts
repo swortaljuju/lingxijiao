@@ -13,7 +13,7 @@ export class WebpackProtobufComiplerPlugin implements WebpackPluginInstance {
   public apply(compiler: Compiler) {
     compiler.hooks.beforeCompile.tap('WebpackProtobufComiplerPlugin',
         () => {
-          const protoFolderPath = path.resolve(__dirname, 'src', 'proto');
+          const protoFolderPath = path.resolve(__dirname, 'proto');
           fs.readdirSync(
               protoFolderPath)
               .filter((fileName: string) => {

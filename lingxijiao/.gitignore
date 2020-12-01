@@ -1,5 +1,5 @@
 **/node_modules/
-/server/dist/
-/server/.env
-/server/src/proto/*.js
-/server/src/proto/*.d.ts
+/src/dist/
+/src/server/.env
+/src/proto/*.js
+/src/proto/*.d.ts
