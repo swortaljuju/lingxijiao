@@ -9,6 +9,7 @@ import {UserModel} from './schema/user';
 import {Post} from '../proto/post.js';
 import {Response} from '../proto/response.js';
 
+declare var STATIC_FILE_PATH: string;
 dotenv.config({
   path: path.resolve(__dirname, '.env'),
 });
@@ -33,3 +34,5 @@ app.get('/', function(req, res) {
 app.listen(3000, function() {
   console.log('App is listening on port 3000!');
 });
+app.use(express.static(STATIC_FILE_PATH!));
+

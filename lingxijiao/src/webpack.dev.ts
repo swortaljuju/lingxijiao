@@ -1,10 +1,10 @@
 import {merge} from 'webpack-merge';
-import {commonConfig, OUTPUT_DIR} from './webpack.common';
+import {commonServerConfig, SERVER_OUTPUT_DIR} from './webpack.common';
 import * as webpack from 'webpack';
 import * as path from 'path';
 import CopyPlugin = require('copy-webpack-plugin');
 
-const devConfig: webpack.Configuration = merge(commonConfig, {
+const devServerConfig: webpack.Configuration = merge(commonServerConfig, {
   mode: 'development',
   devtool: 'inline-source-map',
   plugins: [
@@ -12,7 +12,7 @@ const devConfig: webpack.Configuration = merge(commonConfig, {
       patterns: [
         {
           from: path.resolve(__dirname, 'server', '.env.dev'),
-          to: path.resolve(OUTPUT_DIR, '.env'),
+          to: path.resolve(SERVER_OUTPUT_DIR, '.env'),
           toType: 'file',
         },
       ],
@@ -20,4 +20,4 @@ const devConfig: webpack.Configuration = merge(commonConfig, {
   ],
 });
 
-export default devConfig;
+export default devServerConfig;
