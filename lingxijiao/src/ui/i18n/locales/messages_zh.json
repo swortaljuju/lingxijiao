@@ -1,0 +1,33 @@
+{
+    "title": "灵犀角",
+    "narrationLabel": {
+      "bless": "给你的祝福",
+      "wish": "我的小愿望",
+      "motto": "我的座右铭",
+      "life": "理想的相伴状态"
+    },
+    "charLimit": "(最多{{max}}字)",
+    "defaultQuestion": "还有什么想说的？",
+    "error": {
+      "exceed_post_creation_limit": "每{{day}}最多只能发{{count}}个灵犀贴",
+      "exceed_response_limit": "每{{day}}最多只能回复{{count}}个灵犀贴",
+      "error_parsing_request": "bad request",
+      "invalid_email": "无效的Email",
+      "post_responded": "不能重复回复灵犀贴",
+      "invalid_age": "无效的年龄",
+      "exceed_max_narration_characters_number": "每条灵犀语不得超过{{max}}字",
+      "exceed_max_question_characters_number": "每个问题不得超过{{max}}字",
+      "exceed_max_answer_characters_number": "每条回答不得超过{{max}}字",
+      "empty_narration": "灵犀语不得为空",
+      "unexpected_server_error": "Unexpected server error"
+    },
+    "alert": {
+      "create_post_success": "创建灵犀贴成功",
+      "submit_response_success": "回复灵犀贴成功，一封包含您的email的邮件已发送给灵犀贴的主入。",
+      "submit_feedback_success": "感谢提供反馈"
+    },
+    "male": "男",
+    "female": "女",
+    "feedback": "反馈"
+  }
+  

@@ -10,11 +10,14 @@ export enum Gender {
 
 /** A user */
 export class User {
-    @prop({unique: true, required: true, index: true})
-    public email!: String;
+    @prop({unique: true, required: true, index: true, type: String})
+    public email!: string;
 
-    @prop({unique: true, required: true, enum: Gender})
+    @prop({required: true, enum: Gender})
     public gender!: Gender;
+
+    @prop({required: true, type: Number})
+    public birthYear!: number;
 
     @prop({ref: () => Post})
     public posts?: Ref<Post>[];
@@ -23,4 +26,3 @@ export class User {
     public respondedPosts?: Ref<Post>[];
 }
 
-export const UserModel = getModelForClass(User);

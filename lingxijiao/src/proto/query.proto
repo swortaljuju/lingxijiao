@@ -1,0 +1,9 @@
+syntax = "proto2";
+import "common.proto";
+
+message PostQuery {
+    required Gender gender = 1;
+    optional string search_keyword = 2;
+    optional int64 start_timestamp = 3;
+    required int32 post_number = 4;
+}

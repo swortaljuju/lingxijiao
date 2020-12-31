@@ -1,3 +1,6 @@
+syntax = "proto2";
+import "common.proto";
+
 message QuestionAndAnswer {
     required string question = 1;
     required string answer = 2;
@@ -5,5 +8,8 @@ message QuestionAndAnswer {
 
 message Response {
     required string post_id = 1;
-    repeated QuestionAndAnswer questionAndAnswers =2;   
+    required string email = 2;
+    required Gender gender = 3;
+    repeated QuestionAndAnswer questionAndAnswers = 4;   
+    required int32 age = 5;
 }

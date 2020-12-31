@@ -1,4 +1,7 @@
+syntax = "proto2";
 // Post data sent between frontend and backend for both get and create.
+import "common.proto";
+
 message Narration {
     required string label = 1;
     required string content = 2;
@@ -8,4 +11,11 @@ message Post {
     optional string post_id = 1;
     repeated Narration narrations = 2;
     repeated string questions = 3;
+    // Email should only be set during post creation and 
+    // shouldn't be populated for post loading to hide a user's
+    // identity from others.
+    optional string email = 4;
+    required Gender gender = 5;
+    optional int64 creationTimestamp = 6;
+    optional int32 age = 7;
 }

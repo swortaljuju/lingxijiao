@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build-dev",
+			"path": "src/",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build-dev - src",
+			"detail": "webpack --config webpack.dev.ts"
+		}
+	]
+}

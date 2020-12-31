@@ -115,6 +115,9 @@ We use ReactJs as frontend framework because it is lightweighted and easy to com
 
 We will implement some ideas here http://tekkadanish.blogspot.com/2019/01/single-page-web-app-ui-development.html
 
+### I18n
+We use i18next library and react-i18next plugin. We load messages from backend in a particular locale so that we could limit the size of resource bundles. Right now we only support Chinese.
+
 ## Analytics
 It should maintain a small period of logs for debugging and user behavior analysis.
 

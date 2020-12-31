@@ -16,6 +16,12 @@ Setup Vscode and load the `launch.json` into workspace configuration. Then just 
 [Installation guide](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)  
 [Update `ulimit` hard limit](https://superuser.com/questions/1200539/cannot-increase-open-file-limit-past-4096-ubuntu).
 
+start mongodb:
+```
+sudo mkdir -p /data/db
+sudo mongod
+```
+
 ## Start app
 1. Copy .env.dev to .env and update the envoriment variables in .env with production values.
 2. Initialize node-modules with `npm install`
