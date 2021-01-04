@@ -3,11 +3,13 @@ import * as webpack from 'webpack';
 import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 import {WebpackProtobufComiplerPlugin} from './webpack_protobuf_plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CopyPlugin = require('copy-webpack-plugin');
+import CopyPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
 
 export const SERVER_OUTPUT_DIR = path.resolve(__dirname, '../dist', 'server');
 export const UI_OUTPUT_DIR = path.resolve(__dirname, '../dist', 'ui');
-// Define the config as a function so that environment specific config file could set 
+// Define the config as a function so that environment specific config file could set
 // process.env which is used here.
 export function commonServerConfig(): webpack.Configuration {
     return {
@@ -50,10 +52,19 @@ export function commonUiConfig(): webpack.Configuration {
             filename: 'bundle.js',
         },
         resolve: {
-            extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+            extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.scss'],
         },
         module: {
             rules: [
+                {
+                    test: /\.(sa|sc|c)ss$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        'postcss-loader',
+                        'sass-loader',
+                    ],
+                },
                 {
                     test: /\.(ts|tsx)$/,
                     loader: 'ts-loader',
@@ -85,6 +96,7 @@ export function commonUiConfig(): webpack.Configuration {
                     },
                 ],
             }),
+            new MiniCssExtractPlugin(),
         ],
     };
 }
