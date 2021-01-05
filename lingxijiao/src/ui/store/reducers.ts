@@ -50,15 +50,21 @@ const uiStateSlice = createSlice({
         closeMenu: (state: UiState) => {
             state.menuVisible = false;
         },
-        replyPost: (state: UiState) => {
+        replyPost: (state: UiState, action: PayloadAction<PostData>) => {
             state.replyingPost = true;
+        },
+        closeReplyPostModal: (state: UiState) => {
+            state.replyingPost = false;
         },
         closeAlert: (state: UiState) => {
             // Alert could be closed either by user or after a timeout.
             state.alertVisible = false;
         },
-        showFeedbakc: (state: UiState) => {
+        showFeedback: (state: UiState) => {
             state.feedbackFormVisible = true;
+        },
+        closeFeedback: (state: UiState) => {
+            state.feedbackFormVisible = false;
         },
     },
     extraReducers: {
@@ -176,9 +182,9 @@ const responseFormDataSlice = createSlice({
         // Initialize response form action.
         [uiStateSlice.actions.replyPost.type]: (
             state: ResponseFormData,
-            action,
+            action: PayloadAction<PostData>,
         ) => {
-            const post = action.payload as PostData;
+            const post = action.payload;
             state.errors = [];
             state.response = {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -229,3 +235,15 @@ export const rootReducer = combineReducers({
     responseForm: responseFormDataSlice.reducer,
     alertMessageKey: alertMessageSlice.reducer,
 });
+
+export const showPostCreationModalAction = uiStateSlice.actions.showPostCreationModal;
+export const closePostCreationModalAction = uiStateSlice.actions.closePostCreationModal;
+export const showMenuAction = uiStateSlice.actions.showMenu;
+export const closeMenuAction = uiStateSlice.actions.closeMenu;
+export const closeAlertAction = uiStateSlice.actions.closeAlert;
+export const showFeedbackAction = uiStateSlice.actions.showFeedback;
+export const closeFeedbackAction = uiStateSlice.actions.closeFeedback;
+export const replyPostAction = uiStateSlice.actions.replyPost;
+export const closeReplyPostModalAction = uiStateSlice.actions.closeReplyPostModal;
+export const updateGenderAction = queryParamsSlice.actions.updateGender;
+export const updateSearhKeywordAction = queryParamsSlice.actions.updateSearchKeyword;
