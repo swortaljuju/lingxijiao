@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import './app.scss';
+import './global.scss';
 //import styles from './app.module.scss';
 import HeaderComponent from './header';
 import PostsComponent from './posts';
