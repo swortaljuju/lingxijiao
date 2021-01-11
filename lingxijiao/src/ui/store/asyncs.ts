@@ -3,17 +3,24 @@ import {RootState, PostData, ResponseData} from './states';
 import {createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import {MAX_ANSWER_CHARACTER_NUMBER, MAX_NARRATION_CHARACTER_NUMBER, MAX_QUESTION_CHARACTER_NUMBER} from '../globals';
 import {PostQuery} from '../../proto/query.js';
-import axios from 'axios';
+import axios, {CancelTokenSource} from 'axios';
 import {Post} from '../../proto/post';
 import {Response} from '../../proto/response';
 import {Feedback} from '../../proto/feedback';
 import {ErrorCode} from '../../common/error_codes';
 import validator from 'validator';
 
+const CancelToken = axios.CancelToken;
+let postLoadCancelToken: CancelTokenSource|null;
 
 export const loadPostThunk = createAsyncThunk(
     'post/load',
     async (postNumber: number, {getState, rejectWithValue}) => {
+        if (postLoadCancelToken) {
+            // Cancel previous post loading request before starting the next in case of race condition.
+            postLoadCancelToken.cancel();
+            postLoadCancelToken = null;
+        }
         const {posts, queryParams} = getState() as RootState;
         const postQuery = new PostQuery({
             gender: queryParams.gender,
@@ -23,7 +30,9 @@ export const loadPostThunk = createAsyncThunk(
         });
 
         try {
-            const response = await axios.post('/post/load', PostQuery.toObject(postQuery));
+            postLoadCancelToken = CancelToken.source();
+            const response = await axios.post('/post/load', PostQuery.toObject(postQuery), {cancelToken: postLoadCancelToken.token});
+            postLoadCancelToken = null;
             return (response.data as string[]).map((postJson) =>{
                 const parsedJson = JSON.parse(postJson);
                 const error = Post.verify(parsedJson);
@@ -33,6 +42,7 @@ export const loadPostThunk = createAsyncThunk(
                 return parsedJson as PostData;
             });
         } catch (err) {
+            postLoadCancelToken = null;
             console.error(`Failed to load post. Error: ${err}`);
             return rejectWithValue(err && err.response && err.response.data);
         }
