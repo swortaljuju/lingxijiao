@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {closePostCreationModalAction} from '../store/reducers';
 import {updatePostAction, createPostThunk} from '../store/asyncs';
 import {} from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.scss';
 // import styles from './App.module.scss';
 import {RootState, PostData} from '../store/states';

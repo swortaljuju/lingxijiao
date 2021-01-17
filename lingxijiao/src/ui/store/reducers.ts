@@ -25,10 +25,13 @@ const queryParamsSlice = createSlice({
     } as QueryParamsData,
     reducers: {
         updateGender: (state: QueryParamsData, action: PayloadAction<Gender>) => {
+            console.log('updategender');
             state.gender = action.payload;
             cookie.set(COOKIE_KEY_GENDER, state.gender);
         },
         updateSearchKeyword: (state: QueryParamsData, action: PayloadAction<string>) => {
+            console.log('updateSearchKeyword');
+
             state.searchKeyword = action.payload;
         },
     },
@@ -39,16 +42,11 @@ const uiStateSlice = createSlice({
     initialState: {} as UiState,
     reducers: {
         showPostCreationModal: (state: UiState) => {
+            console.log('showPostCreationModal');
             state.postCreationModalVisible = true;
         },
         closePostCreationModal: (state: UiState) => {
             state.postCreationModalVisible = false;
-        },
-        showMenu: (state: UiState) => {
-            state.menuVisible = true;
-        },
-        closeMenu: (state: UiState) => {
-            state.menuVisible = false;
         },
         replyPost: (state: UiState, action: PayloadAction<PostData>) => {
             state.replyingPost = true;
@@ -61,6 +59,7 @@ const uiStateSlice = createSlice({
             state.alertVisible = false;
         },
         showFeedback: (state: UiState) => {
+            console.log('showFeedback');
             state.feedbackFormVisible = true;
         },
         closeFeedback: (state: UiState) => {
@@ -238,8 +237,6 @@ export const rootReducer = combineReducers({
 
 export const showPostCreationModalAction = uiStateSlice.actions.showPostCreationModal;
 export const closePostCreationModalAction = uiStateSlice.actions.closePostCreationModal;
-export const showMenuAction = uiStateSlice.actions.showMenu;
-export const closeMenuAction = uiStateSlice.actions.closeMenu;
 export const closeAlertAction = uiStateSlice.actions.closeAlert;
 export const showFeedbackAction = uiStateSlice.actions.showFeedback;
 export const closeFeedbackAction = uiStateSlice.actions.closeFeedback;

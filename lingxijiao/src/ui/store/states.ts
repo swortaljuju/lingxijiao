@@ -26,7 +26,6 @@ export type ResponseData = IResponse;
 // Multiple state can be active at the same time.
 export interface UiState {
     postCreationModalVisible?: boolean;
-    menuVisible?: boolean;
     postsLoading?: boolean;
     replyingPost?: boolean;
     feedbackFormVisible?: boolean;
@@ -56,15 +55,8 @@ export interface RootState {
     alertMessageKey?: string;
 };
 
-export function parseGender(gender: string): Gender {
-    if (gender == Gender[Gender.FEMALE]) {
-        return Gender.FEMALE;
-    }
-    return Gender.MALE;
-}
-
 export function getCurrentGender(): Gender {
-    return parseGender(cookie.get(COOKIE_KEY_GENDER));
+    return Number(cookie.get(COOKIE_KEY_GENDER));
 }
 
 export function createInitialState(gender: Gender): RootState {

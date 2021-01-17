@@ -1,0 +1,27 @@
+//@import "../../node_modules/bootstrap/scss/bootstrap";
+
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+// default desktop device.
+:root {
+  --number-posts-per-row: 4;
+  --number-visible-post-rows: 2;
+}
+
+// phone vertical view mode
+@include media-breakpoint-down(xs) { 
+  :root {
+    --number-posts-per-row: 1;
+    --number-visible-post-rows: 1.5;
+  }
+}
+
+// phone horizontal view mode
+@include media-breakpoint-between(sm, md) { 
+  :root {
+    --number-posts-per-row: 2;
+    --number-visible-post-rows: 1;
+  }
+}

@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {closeAlertAction} from '../store/reducers';
 import {} from '../store/asyncs';
 import {} from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.scss';
 // import styles from './App.module.scss';
 import {RootState} from '../store/states';

@@ -2,7 +2,6 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {replyPostAction} from '../store/reducers';
 import {} from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.scss';
 // import styles from './App.module.scss';
 import {RootState, PostData} from '../store/states';

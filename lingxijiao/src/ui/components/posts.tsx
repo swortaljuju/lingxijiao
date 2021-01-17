@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {} from '../store/reducers';
 import {loadPostThunk} from '../store/asyncs';
 import {} from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.scss';
 // import styles from './App.module.scss';
 

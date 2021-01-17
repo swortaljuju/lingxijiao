@@ -16,6 +16,8 @@ let postLoadCancelToken: CancelTokenSource|null;
 export const loadPostThunk = createAsyncThunk(
     'post/load',
     async (postNumber: number, {getState, rejectWithValue}) => {
+        console.log('loadPostThunk ' + postNumber);
+
         if (postLoadCancelToken) {
             // Cancel previous post loading request before starting the next in case of race condition.
             postLoadCancelToken.cancel();

@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {closeFeedbackAction} from '../store/reducers';
 import {submitFeedbackThunk} from '../store/asyncs';
 import {} from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.scss';
 // import styles from './App.module.scss';
 import {ThunkDispatch} from 'redux-thunk';

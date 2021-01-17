@@ -1,0 +1,129 @@
+@import "global.scss";
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+$navbarHeight: 56px;
+$genderToggleHeight: 0.60 * $navbarHeight;
+$genderSliderMargin: 0.05 * $genderToggleHeight;
+$genderSliderRadius: ($genderToggleHeight - 2 * $genderSliderMargin) / 2;
+$addButtonDiameter: 2 * $genderSliderRadius;
+
+.navbar {
+  height: $navbarHeight;
+
+  .brand {
+    font-weight: bold;
+    color: $red-font;
+    &:hover {
+      // Override bootstrap style.
+      color: $red-font;
+    }
+
+    // phone vertical view mode
+    @include media-breakpoint-down(sm) { 
+      // Hide brand in phone mode to save space.
+      display: none;
+    }
+  }
+
+  .search-form {
+    margin-left: 10px;
+    flex-grow: 4;
+
+    .gender-toggle {
+      position: relative;
+      height: $genderToggleHeight;
+      width: 2 * $genderToggleHeight;
+      text-align: center;
+  
+      &-input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        z-index: -1;
+      }
+  
+      &-label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: $genderToggleHeight;
+        width: 2 * $genderToggleHeight;
+        background: $maleColor;
+        box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.3) inset;
+        border-radius: $genderToggleHeight / 2;
+  
+        &::before {
+          position: absolute;
+          top: $genderSliderMargin;
+          left: $genderSliderMargin;
+          height: $genderSliderRadius * 2;
+          width: $genderSliderRadius * 2;
+          background-color:  #f9f9f9;
+          box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.3);
+          content: "";
+          border-radius: $genderSliderRadius;
+          transition: 0.4s;
+        }
+  
+        &::after {
+          text-align: center;
+          height: $genderToggleHeight;
+          width: $genderToggleHeight;
+          font-size: $genderToggleHeight;
+          line-height: 1;
+          position: absolute;
+          left: 45%;
+          content: "♂";
+          color: white;
+        }
+      }
+  
+      &-input:checked~.gender-toggle-label {
+        background: $femaleColor;
+  
+        &::before {
+          left: 50%;
+        }
+  
+        &::after {
+          left: 5%;
+          content: "♀";
+        }
+      }
+    }
+  
+    .search {
+      width: 30vw;
+      flex-grow: 4;
+    }
+  }
+  .add-button {
+    width: $addButtonDiameter;
+    height: $addButtonDiameter;
+    border-radius: 50%;
+    background-color: $red-font;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-size: $addButtonDiameter;
+    line-height: 1;
+    box-shadow:  1px 1px 10px 0 $red-font;
+
+    &:active {
+      box-shadow:  1px 1px 15px 0 $red-font;
+    }
+  }
+
+  .menu-bar {
+    justify-content: flex-end;
+    // phone vertical view mode
+    @include media-breakpoint-down(sm) { 
+      & * {
+        text-align: right;
+      }      
+    }
+  }
+}
