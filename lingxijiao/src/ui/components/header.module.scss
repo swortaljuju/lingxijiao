@@ -71,7 +71,7 @@ $addButtonDiameter: 2 * $genderSliderRadius;
           text-align: center;
           height: $genderToggleHeight;
           width: $genderToggleHeight;
-          font-size: $genderToggleHeight;
+          font-size: $genderToggleHeight * 0.9;
           line-height: 1;
           position: absolute;
           left: 45%;
@@ -109,7 +109,7 @@ $addButtonDiameter: 2 * $genderSliderRadius;
     color: white;
     font-weight: bold;
     font-size: $addButtonDiameter;
-    line-height: 1;
+    line-height: .8;
     box-shadow:  1px 1px 10px 0 $red-font;
 
     &:active {
