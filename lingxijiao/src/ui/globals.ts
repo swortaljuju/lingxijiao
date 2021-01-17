@@ -22,3 +22,8 @@ export const MAX_NUMBER_RESPONSE_PER_PERIOD_VAL = Number(MAX_NUMBER_RESPONSE_PER
 
 declare let PERIOD_DAYS_FOR_MAX_NUMBER_CHECK: string;
 export const PERIOD_DAYS_FOR_MAX_NUMBER_CHECK_VAL = Number(PERIOD_DAYS_FOR_MAX_NUMBER_CHECK);
+
+export const availablePostBackgrounds = ['a.jpeg', 'b.jpeg', 'c.jpeg', 'd.jpeg', 'e.jpeg', 'f.jpeg'] as const;
+
+declare let POST_BACKGROUNDS_FOLDER: string;
+export const POST_BACKGROUNDS_FOLDER_VAL = POST_BACKGROUNDS_FOLDER;
