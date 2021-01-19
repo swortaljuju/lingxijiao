@@ -84,7 +84,7 @@ export function commonUiConfig(): webpack.Configuration {
                 'MAX_NUMBER_POST_PER_PERIOD': (process.env.MAX_NUMBER_POST_PER_PERIOD as string),
                 'MAX_NUMBER_RESPONSE_PER_PERIOD': (process.env.MAX_NUMBER_RESPONSE_PER_PERIOD as string),
                 'PERIOD_DAYS_FOR_MAX_NUMBER_CHECK': (process.env.PERIOD_DAYS_FOR_MAX_NUMBER_CHECK as string),
-                'POST_BACKGROUNDS_FOLDER': postBackgroundsFolder,
+                'POST_BACKGROUNDS_FOLDER': JSON.stringify(postBackgroundsFolder),
             }),
             new HtmlWebpackPlugin({
                 template: path.resolve(__dirname, 'ui', 'index.html'),

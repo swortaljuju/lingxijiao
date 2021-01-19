@@ -13,6 +13,11 @@ import validator from 'validator';
 const CancelToken = axios.CancelToken;
 let postLoadCancelToken: CancelTokenSource|null;
 
+export interface LoadPostResult {
+    posts: PostData[],
+    noMorePostToLoad: boolean,
+}
+
 export const loadPostThunk = createAsyncThunk(
     'post/load',
     async (postNumber: number, {getState, rejectWithValue}) => {
@@ -35,7 +40,7 @@ export const loadPostThunk = createAsyncThunk(
             postLoadCancelToken = CancelToken.source();
             const response = await axios.post('/post/load', PostQuery.toObject(postQuery), {cancelToken: postLoadCancelToken.token});
             postLoadCancelToken = null;
-            return (response.data as string[]).map((postJson) =>{
+            const loadedPosts = (response.data as string[]).map((postJson) =>{
                 const parsedJson = JSON.parse(postJson);
                 const error = Post.verify(parsedJson);
                 if (error) {
@@ -43,6 +48,11 @@ export const loadPostThunk = createAsyncThunk(
                 }
                 return parsedJson as PostData;
             });
+
+            return {
+                posts: loadedPosts,
+                noMorePostToLoad: loadedPosts.length < postNumber, 
+            } as LoadPostResult;
         } catch (err) {
             postLoadCancelToken = null;
             console.error(`Failed to load post. Error: ${err}`);

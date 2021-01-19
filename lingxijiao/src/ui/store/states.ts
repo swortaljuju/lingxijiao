@@ -30,6 +30,7 @@ export interface UiState {
     replyingPost?: boolean;
     feedbackFormVisible?: boolean;
     alertVisible?: boolean;
+    noMorePostToLoad?: boolean;
 }
 
 export interface BasePostFormData {

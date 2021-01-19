@@ -34,7 +34,7 @@ type Props = StateProps & OwnProps & DispatchProps
 
 class ModalsComponent extends React.Component<Props, State> {
     render() {
-        return <h1></h1>;
+        return <> </>;
     }
 }
 

@@ -3,7 +3,6 @@
 @import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/mixins";
 
-$navbarHeight: 56px;
 $genderToggleHeight: 0.60 * $navbarHeight;
 $genderSliderMargin: 0.05 * $genderToggleHeight;
 $genderSliderRadius: ($genderToggleHeight - 2 * $genderSliderMargin) / 2;

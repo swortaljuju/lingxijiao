@@ -29,6 +29,8 @@
     "male": "男",
     "female": "女",
     "feedback": "吐槽这个app",
+    "gender": "性别",
+    "age": "{{age}}岁",
     "menu": {
       "developers": "Developers",
       "nsnss": "男生女生说",
@@ -39,6 +41,6 @@
     "search": {
       "genderLabel": "搜索性别",
       "searchLabel": "按回车搜索"
-    }  
+    }
   }
   

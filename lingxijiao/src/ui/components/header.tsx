@@ -7,7 +7,7 @@ import {Navbar, Nav, NavDropdown, Button, Form, FormCheck} from 'react-bootstrap
 import styles from './header.module.scss';
 import {Gender} from '../../proto/common.js';
 import {RootState} from '../store/states';
-import {getPostCountToLoad} from './post-helpers';
+import {getDefaultPostCountToLoad} from './post-helpers';
 
 import {ThunkDispatch} from 'redux-thunk';
 
@@ -34,13 +34,13 @@ type Props = StateProps & OwnProps & DispatchProps
 class HeaderComponent extends React.Component<Props, State> {
     onGenderChange(event: React.FormEvent<HTMLInputElement>) {
         this.props.updateGender((event.target as HTMLInputElement).checked? Gender.FEMALE : Gender.MALE);
-        this.props.loadPost(getPostCountToLoad());
+        this.props.loadPost(getDefaultPostCountToLoad());
     }
 
     onKeywordSearch(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.code == 'Enter') {
             this.props.updateSearhKeyword((event.target as HTMLInputElement).value);
-            this.props.loadPost(getPostCountToLoad());
+            this.props.loadPost(getDefaultPostCountToLoad());
         }
     }
 
@@ -62,8 +62,7 @@ class HeaderComponent extends React.Component<Props, State> {
                 onSubmit={ (e) => e.preventDefault()}>
                 <FormCheck
                     inline
-                    className={styles['gender-toggle']}
-                    title={i18n.t('search.genderLabel')}>
+                    className={styles['gender-toggle']}>
                     <FormCheck.Input
                         id={styles['gender-toggle']}
                         className={styles['gender-toggle-input']}
@@ -74,6 +73,7 @@ class HeaderComponent extends React.Component<Props, State> {
                     <FormCheck.Label
                         htmlFor={styles['gender-toggle']}
                         className={styles['gender-toggle-label']}
+                        title={i18n.t('search.genderLabel')}
                     ></FormCheck.Label>
                 </FormCheck>
                 <Form.Control

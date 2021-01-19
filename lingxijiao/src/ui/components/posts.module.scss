@@ -1,0 +1,69 @@
+@import "global.scss";
+
+
+.posts-container {
+    width: 100%;
+    height: calc(100vh - #{$navbarHeight});
+    overflow-y: scroll;
+    background: $red-background;
+    margin-top: $navbarHeight;
+}
+
+.posts { 
+    justify-content: space-evenly;
+
+    .post {
+        border-radius: 20px !important;
+        flex: 0 0 calc(95vw / var(--number-posts-per-row));
+        background-repeat: no-repeat;
+        background-size: 100% 100%;    
+        margin-top: 15px;
+        box-shadow:  1px 1px 10px 0 rgba(0, 0, 0, 0.1);
+
+        &:active {
+            box-shadow:  1px 1px 20px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .background-image {
+            height: 100%;
+        }
+    
+        .gender-age-container {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            display: flex;
+            justify-content: space-evenly;
+            padding: 0;
+            background: none;
+            .gender {
+                .male {
+                    color: $maleColor
+                }
+    
+                .female {
+                    color: $femaleColor
+                }
+            }
+        }
+    
+        .narrations {
+            text-shadow: 1px 1px 3px gray; 
+            & * {
+                background: none;
+                border: none;
+            }
+
+            .narration-content {
+                font-style: italic;
+                font-family: 'ZCOOL KuaiLe', cursive;
+            }
+        }
+    }
+
+    .spinner-card {
+        text-align: center;
+        align-items: center;
+    }
+}
+
+
+

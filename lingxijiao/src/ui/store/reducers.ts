@@ -3,7 +3,7 @@ import {combineReducers} from 'redux';
 import {getCurrentGender, QueryParamsData, UiState, PostData, BasePostFormData, initializeNewPost, ResponseFormData, ResponseData, UserData} from './states';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Gender} from '../../proto/common.js';
-import {loadPostThunk, createPostThunk, submitFeedbackThunk, submitResponseThunk, updatePostAction, updateResponseAction} from './asyncs';
+import {loadPostThunk, LoadPostResult, createPostThunk, submitFeedbackThunk, submitResponseThunk, updatePostAction, updateResponseAction} from './asyncs';
 import { ErrorCode } from '../../common/error_codes';
 import {cookie, COOKIE_KEY_GENDER} from '../globals';
 
@@ -49,6 +49,7 @@ const uiStateSlice = createSlice({
             state.postCreationModalVisible = false;
         },
         replyPost: (state: UiState, action: PayloadAction<PostData>) => {
+            console.log('replying post');
             state.replyingPost = true;
         },
         closeReplyPostModal: (state: UiState) => {
@@ -70,10 +71,12 @@ const uiStateSlice = createSlice({
         // update postloading and replyingPost states based on thunk result
         [loadPostThunk.pending.type]: (state: UiState) => {
             state.postsLoading = true;
+            state.noMorePostToLoad = false;
         },
 
-        [loadPostThunk.fulfilled.type]: (state: UiState) => {
+        [loadPostThunk.fulfilled.type]: (state: UiState, action) => {
             state.postsLoading = false;
+            state.noMorePostToLoad = (action.payload as LoadPostResult).noMorePostToLoad;
         },
 
         [loadPostThunk.rejected.type]: (state: UiState) => {
@@ -112,7 +115,7 @@ const postsSlice = createSlice({
         [queryParamsSlice.actions.updateSearchKeyword.type]: () => [],
         [queryParamsSlice.actions.updateGender.type]: () => [],
         [loadPostThunk.fulfilled.type]: (state: PostData[], action) => {
-            state.push(...(action.payload as PostData[]));
+            state.push(...(action.payload as LoadPostResult).posts);
         },
     },
 
