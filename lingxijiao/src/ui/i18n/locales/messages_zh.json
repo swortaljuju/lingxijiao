@@ -19,12 +19,27 @@
       "exceed_max_question_characters_number": "每个问题不得超过{{max}}字",
       "exceed_max_answer_characters_number": "每条回答不得超过{{max}}字",
       "empty_narration": "灵犀语不得为空",
-      "unexpected_server_error": "Unexpected server error"
+      "unexpected_server_error": "Unexpected server error",
+      "empty_feedback": "请填写反馈"
     },
     "alert": {
-      "create_post_success": "创建灵犀贴成功",
-      "submit_response_success": "回复灵犀贴成功，一封包含您的email的邮件已发送给灵犀贴的主入。",
-      "submit_feedback_success": "感谢提供反馈"
+      "createPostSuccess": "创建灵犀贴成功",
+      "submitResponseSuccess": "回复灵犀贴成功，一封包含您的email的邮件已发送给灵犀贴的主入。",
+      "submitFeedbackSuccess": "感谢提供反馈"
+    },
+    "feedbackModal": {
+      "message": "反馈",
+      "modalHeader": "吐槽"
+    },
+    "postCreationModal": {
+      "modalHeader": "发帖"
+    },
+    "replyPostModal": {
+      "modalHeader": "回帖"
+    },
+    "modal": {
+      "submit": "提交",
+      "close": "关闭"
     },
     "male": "男",
     "female": "女",
@@ -37,10 +52,11 @@
       "releaseNote": "Release notes",
       "tutorial": "使用说明" 
     },
-    "createPost": "发帖",
+    "createPost": "点击发帖",
     "search": {
       "genderLabel": "搜索性别",
       "searchLabel": "按回车搜索"
-    }
+    },
+    "replyPost": "点击回帖"
   }
   

@@ -9,12 +9,14 @@ import {RootState, PostData} from '../store/states';
 import {ErrorCode} from '../../common/error_codes';
 import {Post} from '../../proto/post.js';
 import {ThunkDispatch} from 'redux-thunk';
+import i18n from '../i18n/config';
 
 
 interface State extends PostData {
 }
 
 interface OwnProps {
+    visible: boolean;
 }
 
 interface DispatchProps {
@@ -34,8 +36,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         // copy initial data.
-        const initialState: State = Post.toObject(new Post(props.initialPostData)) as PostData;
-        this.setState(initialState);
+        this.state = Post.toObject(new Post(props.initialPostData)) as PostData;
     }
 
     render() {

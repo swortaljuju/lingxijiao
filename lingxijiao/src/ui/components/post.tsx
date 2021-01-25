@@ -50,6 +50,7 @@ class PostComponent extends React.Component<Props, State> {
         return (
             <Card className={styles['post']}
                 onClick={() => this.props.replyPost(this.props.post)}
+                title={i18n.t('replyPost')}
                 style={{backgroundImage: `url("${createRandomPostBackgroundImageUrl()}")`}}>
                 <Card.Header className={styles['gender-age-container']}>
                     <div className={styles['gender']}>

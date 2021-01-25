@@ -9,11 +9,13 @@ import {RootState, PostData, ResponseData} from '../store/states';
 import {ErrorCode} from '../../common/error_codes';
 import {Response} from '../../proto/response.js';
 import {ThunkDispatch} from 'redux-thunk';
+import i18n from '../i18n/config';
 
 
 type State = ResponseData
 
 interface OwnProps {
+    visible: boolean;
 }
 
 interface DispatchProps {

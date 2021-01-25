@@ -1,12 +1,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {} from '../store/reducers';
-import {} from '../store/asyncs';
-import {} from 'react-bootstrap';
-// import './App.scss';
-// import styles from './App.module.scss';
 import {RootState} from '../store/states';
-
+import AlertModal from './alerts';
+import FeedbackFormModal from './feedback-form';
+import PostCreationFormModal from './post-creation-form';
+import ReplyPostFormModal from './reply-post-form';
 
 interface State {
 }
@@ -34,7 +32,12 @@ type Props = StateProps & OwnProps & DispatchProps
 
 class ModalsComponent extends React.Component<Props, State> {
     render() {
-        return <> </>;
+        return <div>
+            <AlertModal visible={this.props.visibleModal == VisibleModal.ALERT}/>
+            <FeedbackFormModal visible={this.props.visibleModal == VisibleModal.SUBMIT_FEEDBACK_FORM}/>
+       {/*   <PostCreationFormModal visible={this.props.visibleModal == VisibleModal.POST_CREATION_FORM}/>
+            <ReplyPostFormModal visible={this.props.visibleModal == VisibleModal.REPLY_POST_FORM}/> */}
+        </div>;
     }
 }
 

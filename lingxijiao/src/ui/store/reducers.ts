@@ -221,9 +221,9 @@ const alertMessageSlice = createSlice({
     initialState: '',
     reducers: {},
     extraReducers: {
-        [createPostThunk.fulfilled.type]: () => 'alert.create_post_success',
-        [submitResponseThunk.fulfilled.type]: () => 'alert.submit_response_success',
-        [submitFeedbackThunk.fulfilled.type]: () => 'alert.submit_feedback_success',
+        [createPostThunk.fulfilled.type]: () => 'alert.createPostSuccess',
+        [submitResponseThunk.fulfilled.type]: () => 'alert.submitResponseSuccess',
+        [submitFeedbackThunk.fulfilled.type]: () => 'alert.submitFeedbackSuccess',
     },
 });
 
