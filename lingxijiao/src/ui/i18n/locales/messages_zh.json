@@ -7,10 +7,11 @@
       "life": "理想的相伴状态"
     },
     "charLimit": "(最多{{max}}字)",
+    "charCount": "{{count}}字",
     "defaultQuestion": "还有什么想说的？",
     "error": {
-      "exceed_post_creation_limit": "每{{day}}最多只能发{{count}}个灵犀贴",
-      "exceed_response_limit": "每{{day}}最多只能回复{{count}}个灵犀贴",
+      "exceed_post_creation_limit": "每{{day}}天最多只能发{{count}}个灵犀贴",
+      "exceed_response_limit": "每{{day}}天最多只能回复{{count}}个灵犀贴",
       "error_parsing_request": "bad request",
       "invalid_email": "无效的Email",
       "post_responded": "不能重复回复灵犀贴",
@@ -20,7 +21,8 @@
       "exceed_max_answer_characters_number": "每条回答不得超过{{max}}字",
       "empty_narration": "灵犀语不得为空",
       "unexpected_server_error": "Unexpected server error",
-      "empty_feedback": "请填写反馈"
+      "empty_feedback": "请填写反馈",
+      "general": "表格中有错误："
     },
     "alert": {
       "createPostSuccess": "创建灵犀贴成功",
@@ -32,10 +34,15 @@
       "modalHeader": "吐槽"
     },
     "postCreationModal": {
-      "modalHeader": "发帖"
+      "modalHeader": "发帖",
+      "yourQuestions": "你想问的问题："
     },
     "replyPostModal": {
       "modalHeader": "回帖"
+    },
+    "formLabels": {
+      "email": "Email",
+      "age": "年龄"
     },
     "modal": {
       "submit": "提交",

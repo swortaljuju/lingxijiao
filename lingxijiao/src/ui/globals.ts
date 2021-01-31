@@ -4,10 +4,10 @@ export const cookie = new Cookies();
 export const COOKIE_KEY_GENDER = 'gender';
 // i18n keys for post narration labels
 export const NARRATION_LABELS = [
-    'narraionLabel.bless', // hobby
-    'narraionLabel.wish', // hobby
-    'narraionLabel.motto', // value
-    'narraionLabel.life', // love and accompanying style
+    'narrationLabel.bless', // hobby
+    'narrationLabel.wish', // hobby
+    'narrationLabel.motto', // value
+    'narrationLabel.life', // love and accompanying style
 ] as const;
 
 export const MAX_NARRATION_CHARACTER_NUMBER = 40;
@@ -27,3 +27,5 @@ export const availablePostBackgrounds = ['a.jpeg', 'b.jpeg', 'd.jpeg', 'e.jpeg']
 
 declare let POST_BACKGROUNDS_FOLDER: string;
 export const POST_BACKGROUNDS_FOLDER_VAL = POST_BACKGROUNDS_FOLDER;
+
+export const NUMBER_QUESTIONS_ALLOWED = 3;

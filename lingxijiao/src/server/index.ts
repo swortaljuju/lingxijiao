@@ -147,12 +147,13 @@ app.post('/post/create', async function(req, res) {
         select: '_id',
     }).exec();
     const birthYear = getBirthYearFromAge(clientPostData.age);
+    const dbGender = fromClientGenderToDbGender(clientPostData.gender);
     let userData: DocumentType<User>;
     if (userDataArray.length == 0) {
         // Create a user.
         userData = await UserModel.create({
             email: clientPostData.email,
-            gender: fromClientGenderToDbGender(clientPostData.gender),
+            gender: dbGender,
             posts: [],
             respondedPosts: [],
             birthYear,
@@ -173,7 +174,9 @@ app.post('/post/create', async function(req, res) {
         narrations: clientPostData.narrations,
         questions: clientPostData.questions,
         responses: [],
-        gender: userData.gender,
+        // Always use post's gender and age even when it doesn't match user's initial value
+        // until we support user profile setting.
+        gender: dbGender,
         birthYear,
     };
     const createdPost: DocumentType<DbPost> = await PostModel.create(newDbPost);

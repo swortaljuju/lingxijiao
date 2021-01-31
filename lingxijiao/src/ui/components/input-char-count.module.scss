@@ -1,0 +1,12 @@
+.limit {
+    &-exceeded {
+        color: red;
+    } 
+    &-under {
+        color: green;
+    } 
+
+    &-exceeded, &-under {
+        margin-left: 20px;
+    }
+}

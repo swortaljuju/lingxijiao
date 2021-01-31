@@ -3,7 +3,7 @@ import {combineReducers} from 'redux';
 import {getCurrentGender, QueryParamsData, UiState, PostData, BasePostFormData, initializeNewPost, ResponseFormData, ResponseData, UserData} from './states';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Gender} from '../../proto/common.js';
-import {loadPostThunk, LoadPostResult, createPostThunk, submitFeedbackThunk, submitResponseThunk, updatePostAction, updateResponseAction} from './asyncs';
+import {loadPostThunk, LoadPostResult, createPostThunk, submitFeedbackThunk, submitResponseThunk, updateResponseAction} from './asyncs';
 import { ErrorCode } from '../../common/error_codes';
 import {cookie, COOKIE_KEY_GENDER} from '../globals';
 
@@ -142,9 +142,6 @@ const postCreationFormDataSlice = createSlice({
             // Reset post data.
             state.post = initializeNewPost();
             state.errors = [];
-        },
-        [updatePostAction.type]: (state: BasePostFormData, {payload} ) => {
-            state.post = payload as PostData;
         },
         [createPostThunk.rejected.type]: (state: BasePostFormData, {payload}) => {
             if (Array.isArray(payload)) {

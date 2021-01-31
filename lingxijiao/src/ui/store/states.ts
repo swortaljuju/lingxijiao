@@ -5,7 +5,7 @@ import {IQuestionAndAnswer, IResponse} from '../../proto/response.js';
 import {Gender} from '../../proto/common.js';
 import i18next from 'i18next';
 import {NARRATION_LABELS} from '../globals';
-import {cookie, COOKIE_KEY_GENDER} from '../globals';
+import {cookie, COOKIE_KEY_GENDER, NUMBER_QUESTIONS_ALLOWED} from '../globals';
 
 export interface UserData {
     name?: string;
@@ -71,6 +71,12 @@ export function createInitialState(gender: Gender): RootState {
 }
 
 export function initializeNewPost(gender = Gender.MALE): PostData {
+    const questions = [];
+    for (let i = 0; i < NUMBER_QUESTIONS_ALLOWED; i++) {
+        questions.push('');
+    }
+     // Default question, not editable in the form..
+    questions.push(i18next.t('defaultQuestion'));
     return {
         postId: '',
         narrations: NARRATION_LABELS.map((labelI18nKey) => {
@@ -79,7 +85,7 @@ export function initializeNewPost(gender = Gender.MALE): PostData {
                 content: '',
             };
         }),
-        questions: [i18next.t('defaultQuestion')], // Default question, should not be displayed in post creation form.
+        questions,
         email: '',
         gender,
         age: 0,

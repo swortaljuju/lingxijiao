@@ -35,8 +35,8 @@ class ModalsComponent extends React.Component<Props, State> {
         return <div>
             <AlertModal visible={this.props.visibleModal == VisibleModal.ALERT}/>
             <FeedbackFormModal visible={this.props.visibleModal == VisibleModal.SUBMIT_FEEDBACK_FORM}/>
-       {/*   <PostCreationFormModal visible={this.props.visibleModal == VisibleModal.POST_CREATION_FORM}/>
-            <ReplyPostFormModal visible={this.props.visibleModal == VisibleModal.REPLY_POST_FORM}/> */}
+         <PostCreationFormModal visible={this.props.visibleModal == VisibleModal.POST_CREATION_FORM}/>
+          {/*  <ReplyPostFormModal visible={this.props.visibleModal == VisibleModal.REPLY_POST_FORM}/> */}
         </div>;
     }
 }

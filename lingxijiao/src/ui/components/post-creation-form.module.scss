@@ -1,0 +1,55 @@
+@import "global.scss";
+
+$headerFooterBackground: linear-gradient(#ff8e4d,#ffa26d, #ff8e4d);
+.post-creation-modal {
+    .header {
+        padding-top: 0;
+        padding-bottom: 0;
+        background: $headerFooterBackground;
+    }
+    
+    .body {
+        background: $red-background;
+
+        .error {
+            &-heading {
+                font-size: 1rem;
+            }
+        }
+        .form {
+            .email-input-group {
+                /* This is used as controlId for FormGroup */
+            }
+        
+            .age-input-group {
+                /* This is used as controlId for FormGroup */
+            }
+        
+            .gender-input-group {
+                .male {
+                    color: $maleColor
+                }
+        
+                .female {
+                    color: $femaleColor
+                }
+            }
+        
+            .narration-input-group {
+                /* This is used as controlId for FormGroup */
+            }
+        
+            .questions {
+                .question-input-group {
+                    /* This is used as controlId for FormGroup */
+                }
+            }
+        }
+    }
+
+    .footer {
+        padding-top: 0;
+        padding-bottom: 0;
+        background: $headerFooterBackground;
+    }  
+}

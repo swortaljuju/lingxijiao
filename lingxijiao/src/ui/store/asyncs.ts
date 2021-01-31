@@ -61,46 +61,9 @@ export const loadPostThunk = createAsyncThunk(
     },
 );
 
-function validateNewPostData(postData: PostData): ErrorCode[] {
-    const errors: ErrorCode[] = [];
-    if (!validator.isInt(String(postData.age))) {
-        errors.push(ErrorCode.INVALID_AGE);
-    }
-    if (!postData.email || !validator.isEmail(postData.email)) {
-        errors.push(ErrorCode.INVALID_EMAIL);
-    }
-
-    if (!postData.narrations || postData.narrations.length === 0) {
-        errors.push(ErrorCode.EMPTY_NARRATION);
-    } else {
-        for (const narration of postData.narrations) {
-            if (narration.content.length > MAX_NARRATION_CHARACTER_NUMBER) {
-                errors.push(ErrorCode.EXCEED_MAX_NARRATION_CHARACTERS_NUMBER);
-                break;
-            } else if (validator.isEmpty(narration.content, {ignore_whitespace: true})) {
-                errors.push(ErrorCode.EMPTY_NARRATION);
-            }
-        }
-    }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    for (const question of postData.questions!) {
-        if (question.length > MAX_QUESTION_CHARACTER_NUMBER) {
-            errors.push(ErrorCode.EXCEED_MAX_QUESTION_CHARACTERS_NUMBER);
-        }
-    }
-    return errors;
-}
-
-export const updatePostAction = createAction<PostData>('postCreationForm/update');
 export const createPostThunk = createAsyncThunk(
     'post/create',
     async (postData: PostData, {rejectWithValue}) => {
-        updatePostAction(postData);
-        const errors = validateNewPostData(postData);
-        if (errors.length > 0) {
-            rejectWithValue(errors);
-            return;
-        }
         try {
             await axios.post('/post/create', Post.toObject(new Post(postData)));
         } catch (err) {
