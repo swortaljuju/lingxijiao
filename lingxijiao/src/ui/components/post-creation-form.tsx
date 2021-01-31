@@ -50,7 +50,6 @@ class PostCreationFormComponent extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        // copy initial data.
         this.state = {
             form: {
                 email: {
@@ -121,7 +120,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                     content: narration.value,
                 };
             }),
-            questions: form.questions.map((question) => question.value),
+            questions: form.questions.map((question) => question.value).filter((question) => question.trim().length > 0),
         };
     }
 

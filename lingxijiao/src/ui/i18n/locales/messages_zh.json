@@ -38,7 +38,8 @@
       "yourQuestions": "你想问的问题："
     },
     "replyPostModal": {
-      "modalHeader": "回帖"
+      "modalHeader": "回帖",
+      "originalPost": "原帖"
     },
     "formLabels": {
       "email": "Email",

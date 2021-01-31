@@ -1,0 +1,74 @@
+@import "global.scss";
+
+$headerFooterBackground: linear-gradient(#ff8e4d,#ffa26d, #ff8e4d);
+.reply-post-modal {
+    .header {
+        padding-top: 0;
+        padding-bottom: 0;
+        background: $headerFooterBackground;
+    }
+    
+    
+    .body {
+        background: $red-background;
+
+        .male {
+            color: $maleColor
+        }
+
+        .female {
+            color: $femaleColor
+        }
+
+        .error {
+            &-heading {
+                font-size: 1rem;
+            }
+        }
+
+        .original-post {
+            font-family: 'ZCOOL KuaiLe', cursive;
+
+            .original-post-header {
+                padding-top: 0;
+                padding-bottom: 0;
+                padding-left: 10px;
+            }
+            
+            .original-post-body {
+                & .gender, & .age {
+                    display: inline-block;
+                }
+                
+                .narration-content {
+                    font-style: italic;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .form {
+            .email-input-group {
+                /* This is used as controlId for FormGroup */
+            }
+        
+            .age-input-group {
+                /* This is used as controlId for FormGroup */
+            }
+        
+            .gender-input-group {
+                /* This is used as controlId for FormGroup */
+            }
+
+            .answer-input-group {
+                /* This is used as controlId for FormGroup */
+            }
+        }
+    }
+
+    .footer {
+        padding-top: 0;
+        padding-bottom: 0;
+        background: $headerFooterBackground;
+    }  
+}
