@@ -8,7 +8,7 @@ import styles from './header.module.scss';
 import {Gender} from '../../proto/common.js';
 import {RootState} from '../store/states';
 import {getDefaultPostCountToLoad} from './post-helpers';
-
+import {VERSION} from '../globals';
 import {ThunkDispatch} from 'redux-thunk';
 
 interface State {
@@ -86,13 +86,15 @@ class HeaderComponent extends React.Component<Props, State> {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse className={styles['menu-bar']} id="responsive-navbar-nav">
                 <Nav>
-                    <Nav.Link onClick={() => this.props.showFeedback()}> {i18n.t('feedback')}  </Nav.Link>
-                    {/*  <Nav.Link>{i18n.t('menu.tutorial')}</Nav.Link> >
-                        <Nav.Link>{i18n.t('menu.releaseNote')}</Nav.Link> */}
-                    <NavDropdown title={i18n.t('menu.developers')} id="collasible-nav-dropdown">
-                        <NavDropdown.Item> <a>Swortal</a> </NavDropdown.Item>
-                    </NavDropdown>
-                    <Nav.Link href="https://liangzn.wixsite.com/yyq2" target="_blank" >{i18n.t('menu.nsnss')}</Nav.Link>
+                    <NavDropdown title={i18n.t('about')} id="collasible-nav-dropdown">
+                        <NavDropdown.Item href="https://liangzn.wixsite.com/yyq2" target="_blank" >{i18n.t('menu.nsnss')}</NavDropdown.Item>
+                        <NavDropdown.Item href={`https://github.com/liangzn/nsnss/releases/tag/${VERSION}`} target="_blank" >{`v${VERSION}`}</NavDropdown.Item>
+                        <NavDropdown.Item href="https://github.com/liangzn/nsnss/tree/master/lingxijiao" target="_blank" >Github</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item className={styles['developers']} > {i18n.t('menu.developers')} </NavDropdown.Item>
+                        <NavDropdown.Item href="https://swortal.blogspot.com" target="_blank"> Swortal </NavDropdown.Item>
+                    </NavDropdown> 
+                    <Nav.Link onClick={() => this.props.showFeedback()}> {i18n.t('feedback')}  </Nav.Link>          
                 </Nav>
             </Navbar.Collapse>
 
