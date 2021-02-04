@@ -1,4 +1,4 @@
-import express from 'express';
+import express , {ErrorRequestHandler} from 'express';
 import mongoose, {CreateQuery} from 'mongoose';
 import dotenv from 'dotenv';
 import * as path from 'path';
@@ -16,7 +16,7 @@ import {ErrorCode} from '../common/error_codes';
 import {fromClientGenderToDbGender, fromDbPostToClientPost} from './converters';
 import nodemailer from 'nodemailer';
 
-// This is lib is deprecated but it contains a released d.ts 
+// This is lib is deprecated but it contains a released d.ts
 // while the new lib i18next-http-middleware's d.ts was recently added and not released yet.
 import * as i18nMiddleware from 'i18next-express-middleware';
 
@@ -25,14 +25,48 @@ import {DocumentType} from '@typegoose/typegoose';
 import validator from 'validator';
 import {ObjectId} from 'mongodb';
 import {resources} from './i18n/config';
+import winston from 'winston';
+import 'winston-daily-rotate-file';
 
 
 declare let STATIC_FILE_PATH: string;
+declare module 'express-serve-static-core' {
+    interface Request {
+      profiler?: winston.Profiler
+    }
+  }
+
 type ProtoTypes = typeof PostQuery | typeof ClientPost | typeof ClientPostResponse | typeof Feedback;
 dotenv.config({
     path: path.resolve(__dirname, '.env'),
 });
 mongoose.set('debug', process.env.NODE_ENV != 'production');
+
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    defaultMeta: {service: 'user-service'},
+    transports: [
+        new (winston.transports.DailyRotateFile)({
+            dirname: '/tmp',
+            filename: 'lingxijiao-%DATE%.log',
+            zippedArchive: true,
+            maxSize: '20m',
+            maxFiles: '14d',
+        })
+    ],
+});
+
+//
+// If we're not in production then log to the `console` with the format:
+// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+//
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple(),
+    }));
+}
 
 // Create a new express app instance
 const app: express.Application = express();
@@ -83,6 +117,13 @@ function getBirthYearFromAge(age: number): number {
     return new Date().getFullYear() - age;
 }
 
+// Middleware to start profiler.
+app.use(function(req, res, next) {
+    req.profiler = logger.startTimer();
+    next();
+});
+
+
 // Middleware to parse request proto.
 app.use(function(req, res, next) {
     let protoType: ProtoTypes;
@@ -113,7 +154,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.post('/post/load', async function(req, res) {
+app.post('/post/load', async function(req, res, next) {
     const queryData = req.body as PostQuery;
     const dbQuery = PostModel.find({
         gender: fromClientGenderToDbGender(queryData.gender),
@@ -128,10 +169,11 @@ app.post('/post/load', async function(req, res) {
         .sort({createdAt: 'desc'}).exec();
     res.status(200).send(result.map(
         (dbPost) => JSON.stringify(ClientPost.toObject(new ClientPost(fromDbPostToClientPost(dbPost))))));
-});
+    next();
+    });
 
 
-app.post('/post/create', async function(req, res) {
+app.post('/post/create', async function(req, res, next) {
     const clientPostData = req.body as ClientPost;
     if (!validator.isEmail(clientPostData.email)) {
         res.status(400).send([ErrorCode.INVALID_EMAIL]);
@@ -185,6 +227,7 @@ app.post('/post/create', async function(req, res) {
         _id: userData._id,
     }, {$push: {posts: createdPost._id}});
     res.sendStatus(200);
+    next();
 });
 
 function formatGender(gender: ClientGender, req: i18nMiddleware.I18NextRequest): string {
@@ -202,7 +245,7 @@ function createResponseEmailContent(clientPostResponse: ClientPostResponse, req:
     return html;
 }
 
-app.post('/post/reply', async function(req, res) {
+app.post('/post/reply', async function(req, res, next) {
     const clientPostResponse = req.body as ClientPostResponse;
     if (!validator.isEmail(clientPostResponse.email)) {
         res.status(400).send([ErrorCode.INVALID_EMAIL]);
@@ -227,7 +270,7 @@ app.post('/post/reply', async function(req, res) {
         email: clientPostResponse.email,
     }).exec();
     let responderData: DocumentType<User>;
-    const birthYear = getBirthYearFromAge(clientPostResponse.age); 
+    const birthYear = getBirthYearFromAge(clientPostResponse.age);
     if (responderDataArray.length == 0) {
         // Create a user.
         responderData = await UserModel.create({
@@ -279,9 +322,10 @@ app.post('/post/reply', async function(req, res) {
         _id: responderData._id,
     }, {$addToSet: {respondedPosts: new ObjectId(postData._id)}});
     res.sendStatus(200);
+    next();
 });
 
-app.post('/feedback', function(req, res) {
+app.post('/feedback', function(req, res, next) {
     const feedback = req.body as Feedback;
     // send mail with defined transport object
     transporter.sendMail({
@@ -296,7 +340,20 @@ app.post('/feedback', function(req, res) {
             console.log(`Feedback sent`);
         }
     });
-
-
     res.sendStatus(200);
+    next();
 });
+
+// Middleware to stop profiler.
+app.use(function(req, res, next) {
+    if (req.profiler) {
+        req.profiler.done({message: req.path});
+    }
+    next();
+});
+
+// Error logger
+app.use(function(err, req, res, next) {
+    logger.error(err);
+    next(err);
+} as ErrorRequestHandler);

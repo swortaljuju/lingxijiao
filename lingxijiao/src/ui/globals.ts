@@ -29,4 +29,4 @@ declare let POST_BACKGROUNDS_FOLDER: string;
 export const POST_BACKGROUNDS_FOLDER_VAL = POST_BACKGROUNDS_FOLDER;
 
 export const NUMBER_QUESTIONS_ALLOWED = 3;
-export const VERSION = '0.0.1';
+export const VERSION = '0.0.2';

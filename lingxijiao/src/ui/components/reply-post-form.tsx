@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {closeReplyPostModalAction} from '../store/reducers';
 import {submitResponseThunk} from '../store/asyncs';
-import {Modal, Button, Form, Alert, Col, Card, Accordion} from 'react-bootstrap';
+import {Modal, Button, Form, Alert, Col, Card, Accordion, Spinner} from 'react-bootstrap';
 import styles from './reply-post-form.module.scss';
 import {RootState, PostData, ResponseData} from '../store/states';
 import {ErrorCode} from '../../common/error_codes';
@@ -26,6 +26,7 @@ interface Form {
 interface State {
     form: Form;
     hasFormError: boolean;
+    isSaving: boolean;
 }
 
 interface OwnProps {
@@ -47,6 +48,7 @@ type Props = StateProps & OwnProps & DispatchProps
 
 class ReplyPostFormComponent extends React.Component<Props, State> {
     private modalBodyRef: React.RefObject<HTMLDivElement>;
+    private isSaving: boolean;
 
     constructor(props: Props) {
         super(props);
@@ -70,8 +72,10 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                 answers: [],
             },
             hasFormError: false,
+            isSaving: false,
         };
         this.modalBodyRef = React.createRef();
+        this.isSaving = false;
     }
 
     private convertApiDataToForm(response: ResponseData): Form {
@@ -123,16 +127,26 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
         });
     }
 
-    onSubmit(event: React.FormEvent) {
+    async onSubmit(event: React.FormEvent) {
         event.preventDefault();
         event.stopPropagation();
-        const isFormValid = this.validate();
-        if (isFormValid) {
-            this.props.submitResponse(this.convertFormToApiData(this.state.form, this.props.post.postId!));
+        if (this.state.isSaving) {
+            return;
         }
+        const isFormValid = this.validate();
         this.setState({
             hasFormError: !isFormValid,
         });
+
+        if (isFormValid) {
+            this.setState({
+                isSaving: true,
+            });
+            await this.props.submitResponse(this.convertFormToApiData(this.state.form, this.props.post.postId!));
+            this.setState({
+                isSaving: false,
+            });
+        }
     }
 
     private validate(): boolean {
@@ -338,7 +352,10 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             </Modal.Body>
             <Modal.Footer className={styles['footer']}>
                 <Button variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
-                <Button variant="primary" type="submit" form={styles['form']}> {i18n.t('modal.submit')} </Button>
+                <Button variant="primary" type="submit" form={styles['form']} disabled={this.state.isSaving}>
+                    {this.state.isSaving ? (<Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>) : i18n.t('modal.submit')} </Button>
             </Modal.Footer>
         </Modal>;
     }

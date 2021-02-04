@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {closePostCreationModalAction} from '../store/reducers';
 import {createPostThunk} from '../store/asyncs';
-import {Modal, Button, Form, Alert, Col} from 'react-bootstrap';
+import {Modal, Button, Form, Alert, Col, Spinner} from 'react-bootstrap';
 import styles from './post-creation-form.module.scss';
 import {RootState, PostData} from '../store/states';
 import {ErrorCode} from '../../common/error_codes';
@@ -26,6 +26,7 @@ interface Form {
 interface State {
     form: Form;
     hasFormError: boolean;
+    isSaving: boolean;
 }
 
 interface OwnProps {
@@ -71,6 +72,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                 questions: [],
             },
             hasFormError: false,
+            isSaving: false,
         };
         this.modalBodyRef = React.createRef();
     }
@@ -131,16 +133,26 @@ class PostCreationFormComponent extends React.Component<Props, State> {
         });
     }
 
-    onSubmit(event: React.FormEvent) {
+    async onSubmit(event: React.FormEvent) {
         event.preventDefault();
         event.stopPropagation();
-        const isFormValid = this.validate();
-        if (isFormValid) {
-            this.props.submitPost(this.convertFormToApiData(this.state.form));
+        if (this.state.isSaving) {
+            return;
         }
+        const isFormValid = this.validate();
         this.setState({
             hasFormError: !isFormValid,
         });
+        if (isFormValid) {
+            this.setState({
+                isSaving: true,
+            });
+            await this.props.submitPost(this.convertFormToApiData(this.state.form));
+            this.setState({
+                isSaving: false,
+            });
+        }
+       
     }
 
     private validate(): boolean {
@@ -338,7 +350,10 @@ class PostCreationFormComponent extends React.Component<Props, State> {
             </Modal.Body>
             <Modal.Footer className={styles['footer']}>
                 <Button variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
-                <Button variant="primary" type="submit" form={styles['form']}> {i18n.t('modal.submit')} </Button>
+                <Button variant="primary" type="submit" form={styles['form']} disabled={this.state.isSaving}>
+                    {this.state.isSaving ? (<Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>) : i18n.t('modal.submit')} </Button>
             </Modal.Footer>
         </Modal>;
     }
