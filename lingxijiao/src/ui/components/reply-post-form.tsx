@@ -14,7 +14,7 @@ import {InputCharCount} from './input-char-count';
 import {BasicFormField, validateBasicFormField, formatSingleFieldErrors} from './forms-utils';
 import {Gender} from '../../proto/common.js';
 import {MAX_ANSWER_CHARACTER_NUMBER} from '../globals';
-
+import {generateId} from '../id-generators';
 
 interface Form {
     email: BasicFormField<string>;
@@ -48,7 +48,8 @@ type Props = StateProps & OwnProps & DispatchProps
 
 class ReplyPostFormComponent extends React.Component<Props, State> {
     private modalBodyRef: React.RefObject<HTMLDivElement>;
-    private isSaving: boolean;
+    private readonly formId = generateId();
+    private readonly genderRadioId = generateId();
 
     constructor(props: Props) {
         super(props);
@@ -75,7 +76,6 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             isSaving: false,
         };
         this.modalBodyRef = React.createRef();
-        this.isSaving = false;
     }
 
     private convertApiDataToForm(response: ResponseData): Form {
@@ -204,7 +204,7 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
 
     private renderAnswers(): React.ReactNode[] {
         return this.state.form.answers.map((answer, index) => {
-            return <Form.Group key={`answers-${index}`} controlId={styles['answer-input-group'] + index}>
+            return <Form.Group key={`answers-${index}`} controlId={`${this.formId}-answers-${index}`}>
                 <Form.Label>
                     {answer.label}
                     <InputCharCount charCount={answer.value.length} charLimit={MAX_ANSWER_CHARACTER_NUMBER}/>
@@ -283,7 +283,8 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             onEnter={() => this.onModalShow()}
             show={this.props.visible}
             scrollable
-            className={styles['reply-post-modal']}>
+            className={styles['reply-post-modal']}
+            backdrop='static'>
             <Modal.Header className={styles['header']} closeButton>
                 <Modal.Title >
                     {i18n.t('replyPostModal.modalHeader')}
@@ -292,8 +293,8 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             <Modal.Body className={styles['body']} ref={this.modalBodyRef}>
                 {this.renderErrors()}
                 {this.renderOriginalPost()}
-                <Form id={styles['form']} className={styles['form']} noValidate onSubmit={(event: React.FormEvent) => this.onSubmit(event)} >
-                    <Form.Group className={styles['email-input-group']} controlId={styles['email-input-group']}>
+                <Form id={this.formId} noValidate onSubmit={(event: React.FormEvent) => this.onSubmit(event)} >
+                    <Form.Group controlId={`${this.formId}-email-input-group`}>
                         <Form.Label>{i18n.t('formLabels.email')}</Form.Label>
                         <Form.Control
                             type="email"
@@ -310,7 +311,7 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                         </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Row>
-                        <Form.Group as={Col} className={styles['age-input-group']} controlId={styles['age-input-group']}>
+                        <Form.Group as={Col} controlId={`${this.formId}-age-input-group`}>
                             <Form.Label>{i18n.t('formLabels.age')}</Form.Label>
                             <Form.Control
                                 type="number"
@@ -327,17 +328,17 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group as={Col} className={styles['gender-input-group']} controlId={styles['gender-input-group']}>
+                        <Form.Group as={Col} controlId={this.genderRadioId}>
                             <Form.Label>{i18n.t('gender')}</Form.Label>
                             <div>
-                                <Form.Check inline type='radio' name={styles['gender-input-group']}>
+                                <Form.Check inline type='radio' name={this.genderRadioId}>
                                     <Form.Check.Input type='radio'
                                         checked={this.state.form.gender.value == Gender.MALE}
                                         value='male'
                                         onChange={(event: React.FormEvent<HTMLInputElement>) => this.onGenderChange(event)} />
                                     <Form.Check.Label><IoMdMale className={styles['male']}/></Form.Check.Label>
                                 </Form.Check>
-                                <Form.Check inline type='radio' name={styles['gender-input-group']}>
+                                <Form.Check inline type='radio' name={this.genderRadioId}>
                                     <Form.Check.Input type='radio'
                                         checked={this.state.form.gender.value == Gender.FEMALE}
                                         value='female'
@@ -352,8 +353,8 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             </Modal.Body>
             <Modal.Footer className={styles['footer']}>
                 <Button variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
-                <Button variant="primary" type="submit" form={styles['form']} disabled={this.state.isSaving}>
-                    {this.state.isSaving ? (<Spinner animation="border" role="status">
+                <Button variant="primary" type="submit" form={this.formId} disabled={this.state.isSaving}>
+                    {this.state.isSaving ? (<Spinner animation="border" role="status" size="sm">
                         <span className="sr-only">Loading...</span>
                     </Spinner>) : i18n.t('modal.submit')} </Button>
             </Modal.Footer>

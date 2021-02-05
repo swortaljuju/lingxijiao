@@ -14,6 +14,7 @@ import {MAX_NARRATION_CHARACTER_NUMBER, MAX_QUESTION_CHARACTER_NUMBER} from '../
 import validator from 'validator';
 import {IoMdFemale, IoMdMale} from 'react-icons/io';
 import {InputCharCount} from './input-char-count';
+import {generateId} from '../id-generators';
 
 interface Form {
     email: BasicFormField<string>;
@@ -48,6 +49,8 @@ type Props = StateProps & OwnProps & DispatchProps
 
 class PostCreationFormComponent extends React.Component<Props, State> {
     private modalBodyRef: React.RefObject<HTMLDivElement>;
+    private readonly formId = generateId();
+    private readonly genderRadioId = generateId();
 
     constructor(props: Props) {
         super(props);
@@ -152,7 +155,6 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                 isSaving: false,
             });
         }
-       
     }
 
     private validate(): boolean {
@@ -219,7 +221,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
 
     private renderNarrations(): React.ReactNode[] {
         return this.state.form.narrations.map((narration, index) => {
-            return <Form.Group key={`narrations-${index}`} controlId={styles['narration-input-group'] + index}>
+            return <Form.Group key={`narrations-${index}`} controlId={`${this.formId}-narrations-${index}`}>
                 <Form.Label>
                     {narration.label}
                     <InputCharCount charCount={narration.value.length} charLimit={MAX_NARRATION_CHARACTER_NUMBER}/>
@@ -242,7 +244,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
     }
     private renderQuestions(): React.ReactNode[] {
         return this.state.form.questions.map((question, index) => {
-            return <Form.Group key={`questions-${index}`} controlId={styles['question-input-group'] + index}>
+            return <Form.Group key={`questions-${index}`} controlId={`${this.formId}-questions-${index}`}>
                 <Form.Control
                     disabled={index == this.state.form.questions.length - 1}
                     type="text"
@@ -267,7 +269,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
         if (((this.state.hasFormError && !prevState.hasFormError) || 
             (this.props.serverErrors.length > 0 && JSON.stringify(currentServerErrors) != JSON.stringify(prevServerErrors))) &&
             this.modalBodyRef.current) {
-            // Scroll to top to show user new error. 
+            // Scroll to top to show user new error.
             this.modalBodyRef.current.scrollTop = 0;
         }
     }
@@ -278,7 +280,8 @@ class PostCreationFormComponent extends React.Component<Props, State> {
             onEnter={() => this.onModalShow()}
             show={this.props.visible}
             scrollable
-            className={styles['post-creation-modal']}>
+            className={styles['post-creation-modal']}
+            backdrop='static'>
             <Modal.Header className={styles['header']} closeButton>
                 <Modal.Title >
                     {i18n.t('postCreationModal.modalHeader')}
@@ -286,8 +289,8 @@ class PostCreationFormComponent extends React.Component<Props, State> {
             </Modal.Header>
             <Modal.Body className={styles['body']} ref={this.modalBodyRef}>
                 {this.renderErrors()}
-                <Form id={styles['form']} className={styles['form']} noValidate onSubmit={(event: React.FormEvent) => this.onSubmit(event)} >
-                    <Form.Group className={styles['email-input-group']} controlId={styles['email-input-group']}>
+                <Form id={this.formId} className={styles['form']} noValidate onSubmit={(event: React.FormEvent) => this.onSubmit(event)} >
+                    <Form.Group controlId={`${this.formId}-email-input-group`}>
                         <Form.Label>{i18n.t('formLabels.email')}</Form.Label>
                         <Form.Control
                             type="email"
@@ -304,7 +307,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                         </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Row>
-                        <Form.Group as={Col} className={styles['age-input-group']} controlId={styles['age-input-group']}>
+                        <Form.Group as={Col} controlId={`${this.formId}-age-input-group`}>
                             <Form.Label>{i18n.t('formLabels.age')}</Form.Label>
                             <Form.Control
                                 type="number"
@@ -321,17 +324,17 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group as={Col} className={styles['gender-input-group']} controlId={styles['gender-input-group']}>
+                        <Form.Group as={Col} className={styles['gender-input-group']} controlId={this.genderRadioId}>
                             <Form.Label>{i18n.t('gender')}</Form.Label>
                             <div>
-                                <Form.Check inline type='radio' name={styles['gender-input-group']}>
+                                <Form.Check inline type='radio' name={this.genderRadioId}>
                                     <Form.Check.Input type='radio'
                                         checked={this.state.form.gender.value == Gender.MALE}
                                         value='male'
                                         onChange={(event: React.FormEvent<HTMLInputElement>) => this.onGenderChange(event)} />
                                     <Form.Check.Label><IoMdMale className={styles['male']}/></Form.Check.Label>
                                 </Form.Check>
-                                <Form.Check inline type='radio' name={styles['gender-input-group']}>
+                                <Form.Check inline type='radio' name={this.genderRadioId}>
                                     <Form.Check.Input type='radio'
                                         checked={this.state.form.gender.value == Gender.FEMALE}
                                         value='female'
@@ -342,7 +345,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                         </Form.Group>
                     </Form.Row>
                     {this.renderNarrations()}
-                    <Form.Group controlId={styles['questions']}>
+                    <Form.Group controlId={`${this.formId}-questions`}>
                         <Form.Label>{i18n.t('postCreationModal.yourQuestions')}</Form.Label>
                         {this.renderQuestions()}
                     </Form.Group>
@@ -350,8 +353,8 @@ class PostCreationFormComponent extends React.Component<Props, State> {
             </Modal.Body>
             <Modal.Footer className={styles['footer']}>
                 <Button variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
-                <Button variant="primary" type="submit" form={styles['form']} disabled={this.state.isSaving}>
-                    {this.state.isSaving ? (<Spinner animation="border" role="status">
+                <Button variant="primary" type="submit" form={this.formId} disabled={this.state.isSaving}>
+                    {this.state.isSaving ? (<Spinner animation="border" role="status" size="sm">
                         <span className="sr-only">Loading...</span>
                     </Spinner>) : i18n.t('modal.submit')} </Button>
             </Modal.Footer>

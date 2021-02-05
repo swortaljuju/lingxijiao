@@ -1,4 +1,4 @@
-import {prop, Ref, getModelForClass} from '@typegoose/typegoose';
+import {prop, Ref} from '@typegoose/typegoose';
 import {Post} from './post';
 
 export enum Gender {

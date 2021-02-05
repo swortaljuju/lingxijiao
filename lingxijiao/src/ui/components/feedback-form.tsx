@@ -3,8 +3,6 @@ import {connect} from 'react-redux';
 import {closeFeedbackAction} from '../store/reducers';
 import {submitFeedbackThunk} from '../store/asyncs';
 import {Modal, Button, Form} from 'react-bootstrap';
-// import './App.scss';
-// import styles from './App.module.scss';
 import {ThunkDispatch} from 'redux-thunk';
 import {RootState} from '../store/states';
 import i18n from '../i18n/config';

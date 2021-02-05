@@ -13,6 +13,11 @@ const configs: webpack.Configuration[] = [
     merge(
         commonServerConfig(), {
             mode: 'production',
+            devtool: 'source-map',
+            optimization: {
+                // Minization could cause problem in Typegoose which relies on reflection.
+                minimize: false,
+            },
             plugins: [
                 new CopyPlugin({
                     patterns: [
@@ -24,6 +29,7 @@ const configs: webpack.Configuration[] = [
     merge(
         commonUiConfig(), {
             mode: 'production',
+            devtool: 'source-map',
         }),
 ];
 

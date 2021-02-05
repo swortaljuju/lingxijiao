@@ -17,7 +17,7 @@ export class PostResponse {
     @prop({required: true, ref: () => User})
     public responder!: Ref<User>;
 
-    @prop({type: String})
+    @prop({type: () => [String]})
     public answers!: string[];
 }
 
@@ -27,13 +27,13 @@ export class Post extends TimeStamps {
     @prop({required: true, ref: () => User})
     public poster!: Ref<User>;
 
-    @prop({type: PostNarration})
+    @prop({_id: false, type: () => [PostNarration]})
     public narrations!: PostNarration[];
 
-    @prop({type: String})
+    @prop({type: () => [String]})
     public questions!: string[];
 
-    @prop({_id: false})
+    @prop({_id: false, type: () => [PostResponse]})
     public responses!: PostResponse[];
 
     // Dup user's gender to enable filtering based on gender.

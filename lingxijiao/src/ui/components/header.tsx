@@ -10,6 +10,7 @@ import {RootState} from '../store/states';
 import {getDefaultPostCountToLoad} from './post-helpers';
 import {VERSION} from '../globals';
 import {ThunkDispatch} from 'redux-thunk';
+import {generateId} from '../id-generators';
 
 interface State {
 }
@@ -32,6 +33,8 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps
 
 class HeaderComponent extends React.Component<Props, State> {
+    private readonly genderToggleId: string = generateId();
+
     onGenderChange(event: React.FormEvent<HTMLInputElement>) {
         this.props.updateGender((event.target as HTMLInputElement).checked? Gender.FEMALE : Gender.MALE);
         this.props.loadPost(getDefaultPostCountToLoad());
@@ -64,14 +67,14 @@ class HeaderComponent extends React.Component<Props, State> {
                     inline
                     className={styles['gender-toggle']}>
                     <FormCheck.Input
-                        id={styles['gender-toggle']}
+                        id={this.genderToggleId}
                         className={styles['gender-toggle-input']}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => this.onGenderChange(event)}
                         type="checkbox"
                         checked={this.props.gender == Gender.FEMALE}
                     />
                     <FormCheck.Label
-                        htmlFor={styles['gender-toggle']}
+                        htmlFor={this.genderToggleId}
                         className={styles['gender-toggle-label']}
                         title={i18n.t('search.genderLabel')}
                     ></FormCheck.Label>

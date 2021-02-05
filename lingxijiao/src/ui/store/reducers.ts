@@ -25,13 +25,10 @@ const queryParamsSlice = createSlice({
     } as QueryParamsData,
     reducers: {
         updateGender: (state: QueryParamsData, action: PayloadAction<Gender>) => {
-            console.log('updategender');
             state.gender = action.payload;
             cookie.set(COOKIE_KEY_GENDER, state.gender);
         },
         updateSearchKeyword: (state: QueryParamsData, action: PayloadAction<string>) => {
-            console.log('updateSearchKeyword');
-
             state.searchKeyword = action.payload;
         },
     },
@@ -42,14 +39,12 @@ const uiStateSlice = createSlice({
     initialState: {} as UiState,
     reducers: {
         showPostCreationModal: (state: UiState) => {
-            console.log('showPostCreationModal');
             state.postCreationModalVisible = true;
         },
         closePostCreationModal: (state: UiState) => {
             state.postCreationModalVisible = false;
         },
         replyPost: (state: UiState, action: PayloadAction<PostData>) => {
-            console.log('replying post');
             state.replyingPost = true;
         },
         closeReplyPostModal: (state: UiState) => {
@@ -60,7 +55,6 @@ const uiStateSlice = createSlice({
             state.alertVisible = false;
         },
         showFeedback: (state: UiState) => {
-            console.log('showFeedback');
             state.feedbackFormVisible = true;
         },
         closeFeedback: (state: UiState) => {

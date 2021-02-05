@@ -16,15 +16,7 @@ $headerFooterBackground: linear-gradient(#ff8e4d,#ffa26d, #ff8e4d);
                 font-size: 1rem;
             }
         }
-        .form {
-            .email-input-group {
-                /* This is used as controlId for FormGroup */
-            }
-        
-            .age-input-group {
-                /* This is used as controlId for FormGroup */
-            }
-        
+        .form {   
             .gender-input-group {
                 .male {
                     color: $maleColor
@@ -32,16 +24,6 @@ $headerFooterBackground: linear-gradient(#ff8e4d,#ffa26d, #ff8e4d);
         
                 .female {
                     color: $femaleColor
-                }
-            }
-        
-            .narration-input-group {
-                /* This is used as controlId for FormGroup */
-            }
-        
-            .questions {
-                .question-input-group {
-                    /* This is used as controlId for FormGroup */
                 }
             }
         }

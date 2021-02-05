@@ -1,4 +1,4 @@
-import express , {ErrorRequestHandler} from 'express';
+import express , {ErrorRequestHandler, RequestHandler} from 'express';
 import mongoose, {CreateQuery} from 'mongoose';
 import dotenv from 'dotenv';
 import * as path from 'path';
@@ -8,8 +8,8 @@ import {Post as DbPost} from './schema/post';
 import {User} from './schema/user';
 import {UserModel, PostModel} from './schema/models';
 import {Gender as ClientGender} from '../proto/common.js';
-import {Post as ClientPost} from '../proto/post.js';
-import {Response as ClientPostResponse} from '../proto/response.js';
+import {Post as ClientPost, IPost as ClientIPost} from '../proto/post.js';
+import {Response as ClientPostResponse, IResponse as ClientIResponse} from '../proto/response.js';
 import {PostQuery} from '../proto/query.js';
 import {Feedback} from '../proto/feedback.js';
 import {ErrorCode} from '../common/error_codes';
@@ -37,11 +37,23 @@ declare module 'express-serve-static-core' {
   }
 
 type ProtoTypes = typeof PostQuery | typeof ClientPost | typeof ClientPostResponse | typeof Feedback;
+function wrapPromiseRoute(fn: RequestHandler): RequestHandler {
+    return async function(req, res, next) {
+        try {
+            // run controllers logic
+            await fn(req, res, next);
+        } catch (e) {
+            // if an exception is raised, do not send any response
+            // just continue performing the middleware chain
+            next(e);
+        }
+    };
+}
+
 dotenv.config({
     path: path.resolve(__dirname, '.env'),
 });
 mongoose.set('debug', process.env.NODE_ENV != 'production');
-
 
 const logger = winston.createLogger({
     level: 'info',
@@ -72,7 +84,7 @@ if (process.env.NODE_ENV !== 'production') {
 const app: express.Application = express();
 app.use(express.json());
 app.listen(process.env.NODEJS_PORT, () => {
-    console.log(`app listening at http://localhost:${process.env.NODEJS_PORT}`);
+    logger.info(`app listening at http://localhost:${process.env.NODEJS_PORT}`);
 });
 
 const MONGODB_URL = `mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DB_NAME}`;
@@ -88,7 +100,7 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-    console.log('db connected!');
+    logger.info('db connected!');
 });
 
 const transporter = nodemailer.createTransport({
@@ -154,7 +166,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.post('/post/load', async function(req, res, next) {
+app.post('/post/load', wrapPromiseRoute(async function(req, res, next) {
     const queryData = req.body as PostQuery;
     const dbQuery = PostModel.find({
         gender: fromClientGenderToDbGender(queryData.gender),
@@ -170,31 +182,31 @@ app.post('/post/load', async function(req, res, next) {
     res.status(200).send(result.map(
         (dbPost) => JSON.stringify(ClientPost.toObject(new ClientPost(fromDbPostToClientPost(dbPost))))));
     next();
-    });
+    }));
 
 
-app.post('/post/create', async function(req, res, next) {
-    const clientPostData = req.body as ClientPost;
-    if (!validator.isEmail(clientPostData.email)) {
+app.post('/post/create', wrapPromiseRoute(async function(req, res, next) {
+    const clientPostData = req.body as ClientIPost;
+    if (!validator.isEmail(clientPostData.email || '')) {
         res.status(400).send([ErrorCode.INVALID_EMAIL]);
         return;
     }
     const currentTime = new Date();
     const userDataArray = await UserModel.find({
-        email: clientPostData.email,
+        email: clientPostData.email!,
     }).populate({
         path: 'posts',
         // Fetch posts created in last x days.
         match: {createdAt: {$gte: currentTime.setDate(currentTime.getDate() - Number(process.env.PERIOD_DAYS_FOR_MAX_NUMBER_CHECK))}},
         select: '_id',
     }).exec();
-    const birthYear = getBirthYearFromAge(clientPostData.age);
+    const birthYear = getBirthYearFromAge(clientPostData.age!);
     const dbGender = fromClientGenderToDbGender(clientPostData.gender);
     let userData: DocumentType<User>;
     if (userDataArray.length == 0) {
         // Create a user.
         userData = await UserModel.create({
-            email: clientPostData.email,
+            email: clientPostData.email!,
             gender: dbGender,
             posts: [],
             respondedPosts: [],
@@ -213,8 +225,8 @@ app.post('/post/create', async function(req, res, next) {
     }
     const newDbPost: CreateQuery<DbPost> = {
         poster: userData._id,
-        narrations: clientPostData.narrations,
-        questions: clientPostData.questions,
+        narrations: clientPostData.narrations!,
+        questions: clientPostData.questions!,
         responses: [],
         // Always use post's gender and age even when it doesn't match user's initial value
         // until we support user profile setting.
@@ -228,7 +240,7 @@ app.post('/post/create', async function(req, res, next) {
     }, {$push: {posts: createdPost._id}});
     res.sendStatus(200);
     next();
-});
+}));
 
 function formatGender(gender: ClientGender, req: i18nMiddleware.I18NextRequest): string {
     return (gender == ClientGender.MALE)? req.t('male') : req.t('female');
@@ -245,7 +257,7 @@ function createResponseEmailContent(clientPostResponse: ClientPostResponse, req:
     return html;
 }
 
-app.post('/post/reply', async function(req, res, next) {
+app.post('/post/reply', wrapPromiseRoute(async function(req, res, next) {
     const clientPostResponse = req.body as ClientPostResponse;
     if (!validator.isEmail(clientPostResponse.email)) {
         res.status(400).send([ErrorCode.INVALID_EMAIL]);
@@ -323,9 +335,9 @@ app.post('/post/reply', async function(req, res, next) {
     }, {$addToSet: {respondedPosts: new ObjectId(postData._id)}});
     res.sendStatus(200);
     next();
-});
+}));
 
-app.post('/feedback', function(req, res, next) {
+app.post('/feedback', wrapPromiseRoute(function(req, res, next) {
     const feedback = req.body as Feedback;
     // send mail with defined transport object
     transporter.sendMail({
@@ -335,14 +347,14 @@ app.post('/feedback', function(req, res, next) {
         text: feedback.feedback,
     }, (err) => {
         if (err) {
-            console.log(`Failed to send feedback: ${err.message}`);
+            logger.info(`Failed to send feedback: ${err.message}`);
         } else {
-            console.log(`Feedback sent`);
+            logger.info(`Feedback sent`);
         }
     });
     res.sendStatus(200);
     next();
-});
+}));
 
 // Middleware to stop profiler.
 app.use(function(req, res, next) {
@@ -354,6 +366,6 @@ app.use(function(req, res, next) {
 
 // Error logger
 app.use(function(err, req, res, next) {
-    logger.error(err);
+    logger.error(`err: ${err}; path: ${req.path}; request body: ${JSON.stringify(req.body)}`);
     next(err);
 } as ErrorRequestHandler);
