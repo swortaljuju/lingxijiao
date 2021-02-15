@@ -3,7 +3,7 @@
 import {UserModel, PostModel} from '../server/schema/models';
 import {setupMongoose, setupEnv} from './setup';
 
-setupEnv();
+setupEnv('dev');
 setupMongoose();
 
 (async () => {

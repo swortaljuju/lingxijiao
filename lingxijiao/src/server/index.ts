@@ -107,7 +107,7 @@ db.once('open', function() {
 
 
 const transporter =(function() {
-    if (process.env.HOST_SERVER_ENV == 'AWS') {
+    if (process.env.HOST_SERVER_TYPE == 'AWS') {
         return nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: 587,
@@ -275,7 +275,7 @@ function createResponseEmailContent(clientPostResponse: ClientPostResponse, req:
 }
 
 app.post('/post/reply', wrapPromiseRoute(async function(req, res, next) {
-    const clientPostResponse = req.body as ClientPostResponse;
+    const clientPostResponse = req.body as ClientIResponse;
     if (!validator.isEmail(clientPostResponse.email)) {
         res.status(400).send([ErrorCode.INVALID_EMAIL]);
         return;

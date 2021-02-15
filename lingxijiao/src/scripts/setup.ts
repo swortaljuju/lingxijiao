@@ -2,9 +2,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import * as path from 'path';
 
-export function setupEnv() {
+
+export function setupEnv(env: string) {
     dotenv.config({
-        path: path.resolve(__dirname, '../server/.env.dev'),
+        path: path.resolve(__dirname, '../server/', env == 'prod' ? '.env' : '.env.dev'),
     });
 }
 
@@ -22,8 +23,13 @@ export function setupMongoose(): void {
 
     const db = mongoose.connection;
 
-    db.on('error', console.error.bind(console, 'connection error:'));
+    db.on('error', function(err) {
+        console.error('db connection error');
+        console.error(JSON.stringify(err));
+    });
+
     db.once('open', function() {
         console.log('db connected!');
     });
 }
+

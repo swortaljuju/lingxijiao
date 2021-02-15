@@ -9,7 +9,7 @@ import {UserModel, PostModel} from '../server/schema/models';
 import {DocumentType} from '@typegoose/typegoose';
 import {setupMongoose, setupEnv} from './setup';
 
-setupEnv();
+setupEnv('dev');
 setupMongoose();
 
 const userNumber = Number(process.argv[2]) || 10;
