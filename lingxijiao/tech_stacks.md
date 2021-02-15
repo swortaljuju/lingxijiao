@@ -40,6 +40,13 @@ Full of plugin, covers both build and custom task. Support both forntend and bac
 ### Logger:
 **winston**: Support both logging and profiling
 
+### Process Management:
+**pm2**:  
+- Auto restart the nodejs app on failure
+- Auto clustering the nodejs app
+- Supports zero downtime reload
+
+
 ## Protocal between frontend and backend.
 **Protobuf**: Field type definition and validation. Could be compiled to multiple languages
 

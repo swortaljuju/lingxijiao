@@ -8,7 +8,8 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 
 export const SERVER_OUTPUT_DIR = path.resolve(__dirname, '../dist', 'server');
-export const UI_OUTPUT_DIR = path.resolve(__dirname, '../dist', 'ui');
+const UI_DIST_PATH = 'ui';
+export const UI_OUTPUT_DIR = path.resolve(__dirname, '../dist', UI_DIST_PATH);
 const postBackgroundsFolder = 'post_backgrounds';
 // Define the config as a function so that environment specific config file could set
 // process.env which is used here.
@@ -37,7 +38,7 @@ export function commonServerConfig(): webpack.Configuration {
             new CleanWebpackPlugin(),
             new WebpackProtobufComiplerPlugin(),
             new webpack.DefinePlugin({
-                'STATIC_FILE_PATH': JSON.stringify(UI_OUTPUT_DIR),
+                'UI_DIST_PATH': JSON.stringify(UI_DIST_PATH),
             }),
         ],
     };

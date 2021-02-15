@@ -28,6 +28,9 @@ sudo mongod
 2. Initialize node-modules with `npm install`
 3. Build and start server in dev mode: `npm run start-dev`
 4. Or build and start server in prod mode: `npm run start-prod`  
+
+## Cloud deloyment
+See this [doc](./src/cloud_deployment/README.md)
     
 
 

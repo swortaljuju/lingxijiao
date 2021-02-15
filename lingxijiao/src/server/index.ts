@@ -1,4 +1,4 @@
-import express , {ErrorRequestHandler, RequestHandler} from 'express';
+import express, {ErrorRequestHandler, RequestHandler} from 'express';
 import mongoose, {CreateQuery} from 'mongoose';
 import dotenv from 'dotenv';
 import * as path from 'path';
@@ -29,7 +29,7 @@ import winston from 'winston';
 import 'winston-daily-rotate-file';
 
 
-declare let STATIC_FILE_PATH: string;
+declare let UI_DIST_PATH: string;
 declare module 'express-serve-static-core' {
     interface Request {
       profiler?: winston.Profiler
@@ -66,7 +66,7 @@ const logger = winston.createLogger({
             zippedArchive: true,
             maxSize: '20m',
             maxFiles: '14d',
-        })
+        }),
     ],
 });
 
@@ -103,16 +103,31 @@ db.once('open', function() {
     logger.info('db connected!');
 });
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.APP_EMAIL_ADDRESS,
-        pass: process.env.APP_EMAIL_PASSWORD,
-    },
-});
+
+const transporter =(function() {
+    if (process.env.HOST_SERVER_ENV == 'AWS') {
+        return nodemailer.createTransport({
+            host: 'email-smtp.us-west-2.amazonaws.com',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: process.env.APP_EMAIL_ADDRESS,
+                pass: process.env.APP_EMAIL_PASSWORD,
+            }
+        });
+    } else {
+        return nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.APP_EMAIL_ADDRESS,
+                pass: process.env.APP_EMAIL_PASSWORD,
+            },
+        });
+    }
+})();
 
 // Route to static client web files including index.html.
-app.use(express.static(STATIC_FILE_PATH!));
+app.use(express.static(path.join(__dirname, '../', UI_DIST_PATH)));
 
 i18next
     .use(i18nMiddleware.LanguageDetector)
@@ -182,7 +197,7 @@ app.post('/post/load', wrapPromiseRoute(async function(req, res, next) {
     res.status(200).send(result.map(
         (dbPost) => JSON.stringify(ClientPost.toObject(new ClientPost(fromDbPostToClientPost(dbPost))))));
     next();
-    }));
+}));
 
 
 app.post('/post/create', wrapPromiseRoute(async function(req, res, next) {
