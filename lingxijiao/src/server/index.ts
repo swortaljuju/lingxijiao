@@ -107,7 +107,7 @@ db.once('open', function() {
 const transporter =(function() {
     if (process.env.HOST_SERVER_ENV == 'AWS') {
         return nodemailer.createTransport({
-            host: 'email-smtp.us-west-2.amazonaws.com',
+            host: process.env.SMTP_HOST,
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
