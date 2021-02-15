@@ -111,7 +111,7 @@ const transporter =(function() {
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: process.env.APP_EMAIL_ADDRESS,
+                user: process.env.APP_EMAIL_USERNAME,
                 pass: process.env.APP_EMAIL_PASSWORD,
             }
         });
