@@ -98,7 +98,9 @@ mongoose.connect(MONGODB_URL, {
 
 const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', function(err) {
+    logger.error('db connection failed:' + err);
+});
 db.once('open', function() {
     logger.info('db connected!');
 });
