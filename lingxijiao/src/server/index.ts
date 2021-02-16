@@ -388,5 +388,6 @@ app.use(function(req, res, next) {
 // Error logger
 app.use(function(err, req, res, next) {
     logger.error(`err: ${err}; path: ${req.path}; request body: ${JSON.stringify(req.body)}`);
+    logger.error(err && err.stack);
     next(err);
 } as ErrorRequestHandler);
