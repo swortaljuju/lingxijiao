@@ -35,4 +35,5 @@ transporter.sendMail({
     console.log(err);
     console.log('info');
     console.log(info);
+    process.exit();
 });

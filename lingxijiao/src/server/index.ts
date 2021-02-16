@@ -263,12 +263,14 @@ function formatGender(gender: ClientGender, req: i18nMiddleware.I18NextRequest):
     return (gender == ClientGender.MALE)? req.t('male') : req.t('female');
 }
 
-function createResponseEmailContent(clientPostResponse: ClientPostResponse, req: i18nMiddleware.I18NextRequest): string {
+function createResponseEmailContent(clientPostResponse: ClientIResponse, req: i18nMiddleware.I18NextRequest): string {
     let html = `<div> ${req.t('responseEmail.notice', {email: clientPostResponse.email, gender: formatGender(clientPostResponse.gender, req), age: clientPostResponse.age})}</div><br/>` +
     `<b> ${req.t('responseEmail.warning')}</b><br/><br/>`;
 
-    for (const qa of clientPostResponse.questionAndAnswers) {
-        html+= `<i> ${qa.question}</i><br/>` +`<b> ${qa.answer}</b><br/>`;
+    if (clientPostResponse.questionAndAnswers) {
+        for (const qa of clientPostResponse.questionAndAnswers) {
+            html+= `<i> ${qa.question}</i><br/>` +`<b> ${qa.answer}</b><br/>`;
+        }
     }
 
     return html;
@@ -342,7 +344,7 @@ app.post('/post/reply', wrapPromiseRoute(async function(req, res, next) {
 
     postData.responses.push({
         responder: responderData._id,
-        answers: clientPostResponse.questionAndAnswers.map((qa) => qa.answer),
+        answers: clientPostResponse.questionAndAnswers!.map((qa) => qa.answer),
     });
     await postData.save();
 

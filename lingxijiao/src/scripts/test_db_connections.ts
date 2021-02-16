@@ -18,8 +18,10 @@ const db = mongoose.connection;
 db.on('error', function(err) {
     console.error('db connection error');
     console.error(JSON.stringify(err));
+    process.exit();
 });
 
 db.once('open', function() {
     console.log('db connected!');
+    process.exit();
 });
