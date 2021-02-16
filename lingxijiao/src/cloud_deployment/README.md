@@ -12,3 +12,18 @@
 11. Go to cloud_deployment folder and run `start.sh {num of process}` to launch nodejs.
 12. `reload.sh` reload latest nodejs source without stoping it. 
 13. `cat /tmp/lingxijiao*` to check nodejs log
+
+# Release process:
+## Version number format:
+{major version number}.{minor version number}  
+
+## Major release:
+1. Check out a new branch from head of master with major version number as branch name e.g. `git checkout 1.0`
+2. Push the new branch to remote.
+3. Create a new release and point the release version tag to the head of the major version branch.
+
+## Minor release:
+1. Check out the major version's branch.
+2. Cherry pick any commits from master to the version's branch.
+3. Push the commits to remote. 
+4. Create a new release with a new minor version number and point the release version tag to the head of the major version branch.
