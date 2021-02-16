@@ -16,6 +16,7 @@
 # Release process:
 ## Version number format:
 {major version number}.{minor version number}  
+Version number is defined in `src/ui/globals.ts`
 
 ## Major release:
 1. Check out a new branch from head of master with major version number as branch name e.g. `git checkout 1.0`
