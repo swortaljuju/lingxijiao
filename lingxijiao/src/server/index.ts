@@ -15,6 +15,7 @@ import {Feedback} from '../proto/feedback.js';
 import {ErrorCode} from '../common/error_codes';
 import {fromClientGenderToDbGender, fromDbPostToClientPost} from './converters';
 import nodemailer from 'nodemailer';
+import aws from 'aws-sdk';
 
 // This is lib is deprecated but it contains a released d.ts
 // while the new lib i18next-http-middleware's d.ts was recently added and not released yet.
@@ -109,13 +110,14 @@ db.once('open', function() {
 const transporter =(function() {
     if (process.env.HOST_SERVER_TYPE == 'AWS') {
         return nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: process.env.APP_EMAIL_USERNAME,
-                pass: process.env.APP_EMAIL_PASSWORD,
-            }
+            SES: new aws.SES({
+                apiVersion: '2010-12-01',
+                credentials: new aws.Credentials({
+                    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+                    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+                }),
+                region: process.env.AWS_REGION,
+            }),
         });
     } else {
         return nodemailer.createTransport({
