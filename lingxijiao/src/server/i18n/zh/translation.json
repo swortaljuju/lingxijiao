@@ -5,5 +5,6 @@
       "notice": "你收到一个来自 <b> {{email}} 性别: {{gender}}; 年龄： {{age}}; </b> 的回复，如果感兴趣，可以直接联系他。"
     },
     "male": "男",
-    "female": "女"
+    "female": "女",
+    "originalPost": "原帖"
   }

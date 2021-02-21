@@ -37,7 +37,7 @@ class PostComponent extends React.Component<Props, State> {
 
         for (let i=0; i < this.props.post.narrations!.length; i++) {
             narrationItems.push(
-                <ListGroup.Item key={`narration_label_${i}`}>
+                <ListGroup.Item key={`narration_label_${i}`} className={styles['narration-label']}>
                     {this.props.post.narrations![i].label}
                 </ListGroup.Item>,
             );

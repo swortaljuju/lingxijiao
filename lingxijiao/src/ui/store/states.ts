@@ -57,7 +57,7 @@ export interface RootState {
 };
 
 export function getCurrentGender(): Gender {
-    return Number(cookie.get(COOKIE_KEY_GENDER));
+    return Number(cookie.get(COOKIE_KEY_GENDER)) || Gender.MALE;
 }
 
 export function createInitialState(gender: Gender): RootState {

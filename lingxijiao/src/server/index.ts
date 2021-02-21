@@ -265,16 +265,20 @@ function formatGender(gender: ClientGender, req: i18nMiddleware.I18NextRequest):
     return (gender == ClientGender.MALE)? req.t('male') : req.t('female');
 }
 
-function createResponseEmailContent(clientPostResponse: ClientIResponse, req: i18nMiddleware.I18NextRequest): string {
+function createResponseEmailContent(post: ClientIPost, clientPostResponse: ClientIResponse, req: i18nMiddleware.I18NextRequest): string {
     let html = `<div> ${req.t('responseEmail.notice', {email: clientPostResponse.email, gender: formatGender(clientPostResponse.gender, req), age: clientPostResponse.age})}</div><br/>` +
     `<b> ${req.t('responseEmail.warning')}</b><br/><br/>`;
 
     if (clientPostResponse.questionAndAnswers) {
         for (const qa of clientPostResponse.questionAndAnswers) {
-            html+= `<i> ${qa.question}</i><br/>` +`<b> ${qa.answer}</b><br/>`;
+            html += `<i> ${qa.question}</i><br/>` +`<b> ${qa.answer}</b><br/><br/>`;
         }
     }
 
+    html += `<b> ${req.t('originalPost')}</b><br/>`;
+    for (const narration of post.narrations!) {
+        html += `<div> ${narration.label}</div>` +`<div> ${narration.content}</div>`;
+    }
     return html;
 }
 
@@ -341,7 +345,7 @@ app.post('/post/reply', wrapPromiseRoute(async function(req, res, next) {
         from: process.env.APP_EMAIL_ADDRESS,
         to: (postData.poster as User).email,
         subject: (req as i18nMiddleware.I18NextRequest).t('responseEmail.title'),
-        html: createResponseEmailContent(clientPostResponse, req as i18nMiddleware.I18NextRequest),
+        html: createResponseEmailContent(fromDbPostToClientPost(postData), clientPostResponse, req as i18nMiddleware.I18NextRequest),
     });
 
     postData.responses.push({
