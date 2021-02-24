@@ -5,13 +5,15 @@
     width: 100%;
     height: calc(100vh - #{$navbarHeight});
     overflow-y: scroll;
+    position: fixed;
     background: $red-background;
-    margin-top: $navbarHeight;
+    top: $navbarHeight;
+    left: 0;
 }
 
 .posts { 
     justify-content: space-evenly;
-    margin-bottom: 20vh;
+    padding-bottom: 15vh;
 
     .post {
         border-radius: 20px !important;
