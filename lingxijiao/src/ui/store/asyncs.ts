@@ -1,15 +1,17 @@
 // Contain functions to call backend apis including react's async thunk function
 import {RootState, PostData, ResponseData} from './states';
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import {PostQuery} from '../../proto/query.js';
 import axios, {CancelTokenSource} from 'axios';
 import {Post} from '../../proto/post';
 import {Response} from '../../proto/response';
 import {Feedback} from '../../proto/feedback';
+import {getDefaultPostCountToLoad} from '../components/post-helpers';
 
 const CancelToken = axios.CancelToken;
 let postLoadCancelToken: CancelTokenSource|null;
 
+export const resetPosts = createAction('resetPosts');
 export interface LoadPostResult {
     posts: PostData[],
     noMorePostToLoad: boolean,
@@ -58,9 +60,13 @@ export const loadPostThunk = createAsyncThunk(
 
 export const createPostThunk = createAsyncThunk(
     'post/create',
-    async (postData: PostData, {rejectWithValue}) => {
+    async (postData: PostData, {rejectWithValue, getState, dispatch}) => {
         try {
             await axios.post('/post/create', Post.toObject(new Post(postData)));
+            if ((getState() as RootState).queryParams.gender == postData.gender) {
+                dispatch(resetPosts());
+                dispatch(loadPostThunk(getDefaultPostCountToLoad()));
+            }
         } catch (err) {
             console.error(`Failed to create post. Error: ${err.response}`);
             return rejectWithValue(err.response.data);
