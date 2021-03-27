@@ -91,8 +91,8 @@ class HeaderComponent extends React.Component<Props, State> {
                 <Nav>
                     <NavDropdown title={i18n.t('about')} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="https://liangzn.wixsite.com/yyq2" target="_blank" >{i18n.t('menu.nsnss')}</NavDropdown.Item>
-                        <NavDropdown.Item href={`https://github.com/liangzn/nsnss/releases/tag/${VERSION}`} target="_blank" >{`v${VERSION}`}</NavDropdown.Item>
-                        <NavDropdown.Item href="https://github.com/liangzn/nsnss/tree/master/lingxijiao" target="_blank" >Github</NavDropdown.Item>
+                        <NavDropdown.Item href={`https://github.com/swortaljuju/lingxijiao/releases/tag/${VERSION}`} target="_blank" >{`v${VERSION}`}</NavDropdown.Item>
+                        <NavDropdown.Item href="https://github.com/swortaljuju/lingxijiao/tree/master/app" target="_blank" >Github</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item className={styles['developers']} > {i18n.t('menu.developers')} </NavDropdown.Item>
                         <NavDropdown.Item href="https://swortal.blogspot.com" target="_blank"> Swortal </NavDropdown.Item>
