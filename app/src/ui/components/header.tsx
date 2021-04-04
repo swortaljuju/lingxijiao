@@ -90,7 +90,6 @@ class HeaderComponent extends React.Component<Props, State> {
             <Navbar.Collapse className={styles['menu-bar']} id="responsive-navbar-nav">
                 <Nav>
                     <NavDropdown title={i18n.t('about')} id="collasible-nav-dropdown">
-                        <NavDropdown.Item href="https://liangzn.wixsite.com/yyq2" target="_blank" >{i18n.t('menu.nsnss')}</NavDropdown.Item>
                         <NavDropdown.Item href={`https://github.com/swortaljuju/lingxijiao/releases/tag/${VERSION}`} target="_blank" >{`v${VERSION}`}</NavDropdown.Item>
                         <NavDropdown.Item href="https://github.com/swortaljuju/lingxijiao/tree/master/app" target="_blank" >Github</NavDropdown.Item>
                         <NavDropdown.Divider />

@@ -56,7 +56,6 @@
     "age": "{{age}}岁",
     "menu": {
       "developers": "Developers",
-      "nsnss": "男生女生说",
       "releaseNote": "Release notes",
       "tutorial": "使用说明" 
     },
