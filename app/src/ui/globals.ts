@@ -1,7 +1,4 @@
-import Cookies from 'universal-cookie';
-
-export const cookie = new Cookies();
-export const COOKIE_KEY_GENDER = 'gender';
+export const LOCAL_STORAGE_KEY_GENDER = 'gender';
 // i18n keys for post narration labels
 export const NARRATION_LABELS = [
     'narrationLabel.bless', // hobby

@@ -5,7 +5,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Gender} from '../../proto/common.js';
 import {loadPostThunk, LoadPostResult, createPostThunk, submitFeedbackThunk, submitResponseThunk, resetPosts} from './asyncs';
 import { ErrorCode } from '../../common/error_codes';
-import {cookie, COOKIE_KEY_GENDER} from '../globals';
+import {LOCAL_STORAGE_KEY_GENDER} from '../globals';
 
 
 const userSlice = createSlice({
@@ -26,7 +26,7 @@ const queryParamsSlice = createSlice({
     reducers: {
         updateGender: (state: QueryParamsData, action: PayloadAction<Gender>) => {
             state.gender = action.payload;
-            cookie.set(COOKIE_KEY_GENDER, state.gender);
+            window.localStorage.setItem(LOCAL_STORAGE_KEY_GENDER, String(state.gender));
         },
         updateSearchKeyword: (state: QueryParamsData, action: PayloadAction<string>) => {
             state.searchKeyword = action.payload;
