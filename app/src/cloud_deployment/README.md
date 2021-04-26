@@ -18,13 +18,5 @@
 {major version number}.{minor version number}  
 Version number is defined in `src/ui/globals.ts`
 
-## Major release:
-1. Check out a new branch from head of master with major version number as branch name e.g. `git checkout 1.0`
-2. Push the new branch to remote.
-3. Create a new release and point the release version tag to the head of the major version branch.
-
-## Minor release:
-1. Check out the major version's branch.
-2. Cherry pick any commits from master to the version's branch.
-3. Push the commits to remote. 
-4. Create a new release with a new minor version number and point the release version tag to the head of the major version branch.
+1. Create a commit to update the version number.
+2. In Github, create a new release pointing to the above commit. 
