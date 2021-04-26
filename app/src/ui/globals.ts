@@ -1,4 +1,5 @@
 export const LOCAL_STORAGE_KEY_GENDER = 'gender';
+export const LOCAL_STORAGE_KEY_TUTORIAL_SHOWN = 'tutorial_shown';
 // i18n keys for post narration labels
 export const NARRATION_LABELS = [
     'narrationLabel.bless', // hobby
@@ -27,3 +28,6 @@ export const POST_BACKGROUNDS_FOLDER_VAL = POST_BACKGROUNDS_FOLDER;
 
 export const NUMBER_QUESTIONS_ALLOWED = 3;
 export const VERSION = '0.0';
+
+declare let TUTORIAL_SCREENSHOTS_FOLDER: string;
+export const TUTORIAL_SCREENSHOTS_FOLDER_VAL = TUTORIAL_SCREENSHOTS_FOLDER;

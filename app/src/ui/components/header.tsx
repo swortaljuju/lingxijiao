@@ -1,9 +1,9 @@
 import * as React from 'react';
 import i18n from '../i18n/config';
 import {connect} from 'react-redux';
-import {updateGenderAction, updateSearhKeywordAction, showPostCreationModalAction, showFeedbackAction} from '../store/reducers';
+import {updateGenderAction, updateSearhKeywordAction, showPostCreationModalAction, showFeedbackAction, showTutorialAction} from '../store/reducers';
 import {loadPostThunk} from '../store/asyncs';
-import {Navbar, Nav, NavDropdown, Button, Form, FormCheck} from 'react-bootstrap';
+import {Navbar, Nav, NavDropdown, Form, FormCheck} from 'react-bootstrap';
 import styles from './header.module.scss';
 import {Gender} from '../../proto/common.js';
 import {RootState} from '../store/states';
@@ -24,6 +24,7 @@ interface DispatchProps {
     showPostCreationModal: () => void;
     loadPost: (postNumber: number) => Promise<void>;
     showFeedback: () => void;
+    showTutorial: () => void;
 }
 
 interface StateProps {
@@ -89,6 +90,7 @@ class HeaderComponent extends React.Component<Props, State> {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse className={styles['menu-bar']} id="responsive-navbar-nav">
                 <Nav>
+                    <Nav.Link onClick={() => this.props.showTutorial()}> {i18n.t('tutorial.title')}</Nav.Link> 
                     <NavDropdown title={i18n.t('about')} id="collasible-nav-dropdown">
                         <NavDropdown.Item href={`https://github.com/swortaljuju/lingxijiao/releases/tag/${VERSION}`} target="_blank" >{`v${VERSION}`}</NavDropdown.Item>
                         <NavDropdown.Item href="https://github.com/swortaljuju/lingxijiao/tree/master/app" target="_blank" >Github</NavDropdown.Item>
@@ -130,6 +132,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>, ownProps: Ow
         },
         showFeedback: () => {
             return dispatch(showFeedbackAction());
+        },
+        
+        showTutorial: () => {
+            return dispatch(showTutorialAction());
         },
     };
 };

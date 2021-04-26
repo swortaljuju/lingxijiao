@@ -5,6 +5,7 @@ import AlertModal from './alerts';
 import FeedbackFormModal from './feedback-form';
 import PostCreationFormModal from './post-creation-form';
 import ReplyPostFormModal from './reply-post-form';
+import Tutorial from './tutorial';
 
 interface State {
 }
@@ -20,6 +21,7 @@ enum VisibleModal {
     REPLY_POST_FORM,
     SUBMIT_FEEDBACK_FORM,
     ALERT,
+    TUTORIAL,
     NONE,
 }
 
@@ -37,6 +39,7 @@ class ModalsComponent extends React.Component<Props, State> {
             <FeedbackFormModal visible={this.props.visibleModal == VisibleModal.SUBMIT_FEEDBACK_FORM}/>
             <PostCreationFormModal visible={this.props.visibleModal == VisibleModal.POST_CREATION_FORM}/>
             <ReplyPostFormModal visible={this.props.visibleModal == VisibleModal.REPLY_POST_FORM}/> 
+            <Tutorial visible={this.props.visibleModal == VisibleModal.TUTORIAL}/> 
         </div>;
     }
 }
@@ -52,6 +55,8 @@ const mapStateToProps = (state: RootState): StateProps => {
         visibleModal = VisibleModal.POST_CREATION_FORM;
     } else if (state.uiStates.replyingPost) {
         visibleModal = VisibleModal.REPLY_POST_FORM;
+    } else if (state.uiStates.tutorialVisible) {
+        visibleModal = VisibleModal.TUTORIAL;
     }
     return {
         visibleModal,

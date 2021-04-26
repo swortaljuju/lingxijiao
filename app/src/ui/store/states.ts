@@ -5,7 +5,7 @@ import {IQuestionAndAnswer, IResponse} from '../../proto/response.js';
 import {Gender} from '../../proto/common.js';
 import i18next from 'i18next';
 import {NARRATION_LABELS} from '../globals';
-import {LOCAL_STORAGE_KEY_GENDER, NUMBER_QUESTIONS_ALLOWED} from '../globals';
+import {LOCAL_STORAGE_KEY_GENDER, LOCAL_STORAGE_KEY_TUTORIAL_SHOWN, NUMBER_QUESTIONS_ALLOWED} from '../globals';
 
 export interface UserData {
     name?: string;
@@ -31,6 +31,7 @@ export interface UiState {
     feedbackFormVisible?: boolean;
     alertVisible?: boolean;
     noMorePostToLoad?: boolean;
+    tutorialVisible?: boolean;
 }
 
 export interface BasePostFormData {
@@ -60,13 +61,19 @@ export function getCurrentGender(): Gender {
     return Number(window.localStorage.getItem(LOCAL_STORAGE_KEY_GENDER)) || Gender.MALE;
 }
 
-export function createInitialState(gender: Gender): RootState {
+export function tutorialHasShown(): boolean {
+    return Boolean(window.localStorage.getItem(LOCAL_STORAGE_KEY_TUTORIAL_SHOWN));
+}
+
+export function createInitialState(gender: Gender, tutorialVisible: boolean): RootState {
     return {
         queryParams: {
             gender,
         },
         posts: [] as PostData[],
-        uiStates: {},
+        uiStates: {
+            tutorialVisible
+        },
     };
 }
 

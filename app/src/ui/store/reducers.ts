@@ -60,6 +60,12 @@ const uiStateSlice = createSlice({
         closeFeedback: (state: UiState) => {
             state.feedbackFormVisible = false;
         },
+        showTutorial: (state: UiState) => {
+            state.tutorialVisible = true;
+        },
+        closeTutorial: (state: UiState) => {
+            state.tutorialVisible = false;
+        },
     },
     extraReducers: {
         // update postloading and replyingPost states based on thunk result
@@ -232,6 +238,8 @@ export const closePostCreationModalAction = uiStateSlice.actions.closePostCreati
 export const closeAlertAction = uiStateSlice.actions.closeAlert;
 export const showFeedbackAction = uiStateSlice.actions.showFeedback;
 export const closeFeedbackAction = uiStateSlice.actions.closeFeedback;
+export const showTutorialAction = uiStateSlice.actions.showTutorial;
+export const closeTutorialAction = uiStateSlice.actions.closeTutorial;
 export const replyPostAction = uiStateSlice.actions.replyPost;
 export const closeReplyPostModalAction = uiStateSlice.actions.closeReplyPostModal;
 export const updateGenderAction = queryParamsSlice.actions.updateGender;
