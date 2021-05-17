@@ -27,7 +27,7 @@ $headerFooterBackground: linear-gradient(#ff8e4d,#ffa26d, #ff8e4d);
         }
 
         .original-post {
-            font-family: 'ZCOOL KuaiLe', cursive;
+            font-family: $narrationFontFamily;
 
             .original-post-header {
                 padding-top: 0;
