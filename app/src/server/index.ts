@@ -193,7 +193,10 @@ app.post('/post/load', wrapPromiseRoute(async function(req, res, next) {
     });
 
     if (queryData.searchKeyword) {
-        dbQuery.and([{$text: {$search: queryData.searchKeyword}}]);
+        dbQuery.and([{$text: {
+            $search: queryData.searchKeyword, 
+            // Use none to support chinese text search.
+            $language: 'none'}}]);
     }
 
     const result = await dbQuery.limit(queryData.postNumber)
