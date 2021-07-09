@@ -89,7 +89,7 @@ class HeaderComponent extends React.Component<Props, State> {
             </Form>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse className={styles['menu-bar']} id="responsive-navbar-nav">
-                <Nav>
+                <Nav className={styles['menu-bar-nav']} >
                     <Nav.Link onClick={() => this.props.showTutorial()}> {i18n.t('tutorial.title')}</Nav.Link> 
                     <NavDropdown title={i18n.t('about')} id="collasible-nav-dropdown">
                         <NavDropdown.Item href={`https://github.com/swortaljuju/lingxijiao/releases/tag/${VERSION}`} target="_blank" >{`v${VERSION}`}</NavDropdown.Item>

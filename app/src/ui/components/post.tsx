@@ -11,8 +11,10 @@ import {IoMdFemale, IoMdMale} from 'react-icons/io';
 import {Gender} from '../../proto/common.js';
 
 function createRandomPostBackgroundImageUrl(): string {
+    // Date() creates better random indexes than Math.random() does. And it better avoids
+    // continuously identical index.
     return `${POST_BACKGROUNDS_FOLDER_VAL}/${
-        availablePostBackgrounds[Math.floor(Math.random() * (availablePostBackgrounds.length))]}`;
+        availablePostBackgrounds[new Date().valueOf() % availablePostBackgrounds.length]}`;
 }
 
 interface State {

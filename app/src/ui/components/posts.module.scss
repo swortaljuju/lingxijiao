@@ -26,6 +26,10 @@
         &:active {
             box-shadow:  1px 1px 20px 0 rgba(0, 0, 0, 0.1);
         }
+
+        &:hover {
+            animation: post-border-ripple 1s ease-in infinite;
+        }
         
         .background-image {
             height: 100%;
@@ -76,5 +80,13 @@
     }
 }
 
+@keyframes post-border-ripple {
+    0% {
+      box-shadow:  0 0 0 1px rgba(32, 112, 218, 0.3);
+    }
+    100% {
+      box-shadow:  0 0 0 15px rgba(32, 112, 218, 0.1);
+    }
+  }
 
 
