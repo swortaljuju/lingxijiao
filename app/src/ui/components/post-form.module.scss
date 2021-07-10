@@ -1,0 +1,40 @@
+@import "global.scss";
+
+.post-modal {
+    .modal-content {
+        background: #ffe9d6;
+    }
+
+    .header {
+        padding-top: 0;
+        padding-bottom: 0;
+        .header-title {
+            font-size: 1rem;
+        }
+    }
+   
+    .body {
+        .male {
+            color: $maleColor
+        }
+
+        .female {
+            color: $femaleColor
+        }
+
+        .error {
+            &-heading {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .footer {
+        padding-top: 0;
+        padding-bottom: 0;
+
+        .footer-btn {
+            border-radius: 25% / 40%;
+        }
+    }  
+}

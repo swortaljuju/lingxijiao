@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import {closeReplyPostModalAction} from '../store/reducers';
 import {submitResponseThunk} from '../store/asyncs';
 import {Modal, Button, Form, Alert, Col, Card, Accordion, Spinner} from 'react-bootstrap';
-import styles from './reply-post-form.module.scss';
+import replyPostFormStyles from './reply-post-form.module.scss';
+import postFormStyles from './post-form.module.scss';
 import {RootState, PostData, ResponseData} from '../store/states';
 import {ErrorCode} from '../../common/error_codes';
 import {ThunkDispatch} from 'redux-thunk';
@@ -188,8 +189,8 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
         });
 
 
-        return <Alert variant="danger" className={styles['error']}>
-            <Alert.Heading className={styles['error-heading']}>{i18n.t('error.general')}</Alert.Heading>
+        return <Alert variant="danger" className={postFormStyles['error']}>
+            <Alert.Heading className={postFormStyles['error-heading']}>{i18n.t('error.general')}</Alert.Heading>
             <ul>{errorItems}</ul>
         </Alert>;
     }
@@ -236,25 +237,25 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                 </div>,
             );
             narrationItems.push(
-                <div key={`narration_content_${i}`} className={styles['narration-content']}>
+                <div key={`narration_content_${i}`} className={replyPostFormStyles['narration-content']}>
                     {this.props.post.narrations![i].content}
                 </div>,
             );
         }
-        return <Accordion className={styles['original-post']}>
+        return <Accordion className={replyPostFormStyles['original-post']}>
             <Card>
-                <Accordion.Toggle as={Card.Header} eventKey="0" className={styles['original-post-header']}>
+                <Accordion.Toggle as={Card.Header} eventKey="0" className={replyPostFormStyles['original-post-header']}>
                     {i18n.t('replyPostModal.originalPost')}
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0" className={styles['original-post-body']}>
+                <Accordion.Collapse eventKey="0" className={replyPostFormStyles['original-post-body']}>
                     <Card.Body>
                         <div>
-                            <div className={styles['gender']}>
+                            <div className={postFormStyles['gender']}>
                                 {(this.props.post.gender == Gender.MALE) ?
-                                    <IoMdMale className={styles['male']}/> :
-                                    <IoMdFemale className={styles['female']}/>}
+                                    <IoMdMale className={postFormStyles['male']}/> :
+                                    <IoMdFemale className={postFormStyles['female']}/>}
                             </div>
-                            <div className={styles['age']}>
+                            <div className={postFormStyles['age']}>
                                 {i18n.t('age', {age: this.props.post.age})}
                             </div>
                             {narrationItems}
@@ -283,14 +284,15 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             onEnter={() => this.onModalShow()}
             show={this.props.visible}
             scrollable
-            className={styles['reply-post-modal']}
-            backdrop='static'>
-            <Modal.Header className={styles['header']} closeButton>
-                <Modal.Title >
+            className={`${replyPostFormStyles['reply-post-modal']} ${postFormStyles['post-modal']}`}
+            backdrop='static'
+            contentClassName={postFormStyles['modal-content']}>
+            <Modal.Header className={postFormStyles['header']} closeButton>
+                <Modal.Title className={postFormStyles['header-title']}>
                     {i18n.t('replyPostModal.modalHeader')}
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className={styles['body']} ref={this.modalBodyRef}>
+            <Modal.Body className={`${replyPostFormStyles['body']} ${postFormStyles['body']}`} ref={this.modalBodyRef}>
                 {this.renderErrors()}
                 {this.renderOriginalPost()}
                 <Form id={this.formId} noValidate onSubmit={(event: React.FormEvent) => this.onSubmit(event)} >
@@ -336,14 +338,14 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                                         checked={this.state.form.gender.value == Gender.MALE}
                                         value='male'
                                         onChange={(event: React.FormEvent<HTMLInputElement>) => this.onGenderChange(event)} />
-                                    <Form.Check.Label><IoMdMale className={styles['male']}/></Form.Check.Label>
+                                    <Form.Check.Label><IoMdMale className={postFormStyles['male']}/></Form.Check.Label>
                                 </Form.Check>
                                 <Form.Check inline type='radio' name={this.genderRadioId}>
                                     <Form.Check.Input type='radio'
                                         checked={this.state.form.gender.value == Gender.FEMALE}
                                         value='female'
                                         onChange={(event: React.FormEvent<HTMLInputElement>) => this.onGenderChange(event)}/>
-                                    <Form.Check.Label><IoMdFemale className={styles['female']}/></Form.Check.Label>
+                                    <Form.Check.Label><IoMdFemale className={postFormStyles['female']}/></Form.Check.Label>
                                 </Form.Check>
                             </div>
                         </Form.Group>
@@ -351,9 +353,9 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                     {this.renderAnswers()}
                 </Form>
             </Modal.Body>
-            <Modal.Footer className={styles['footer']}>
-                <Button variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
-                <Button variant="primary" type="submit" form={this.formId} disabled={this.state.isSaving}>
+            <Modal.Footer className={postFormStyles['footer']}>
+                <Button className={postFormStyles['footer-btn']} variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
+                <Button className={postFormStyles['footer-btn']} variant="primary" type="submit" form={this.formId} disabled={this.state.isSaving}>
                     {this.state.isSaving ? (<Spinner animation="border" role="status" size="sm">
                         <span className="sr-only">Loading...</span>
                     </Spinner>) : i18n.t('modal.submit')} </Button>

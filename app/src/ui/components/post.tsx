@@ -37,18 +37,18 @@ type Props = StateProps & OwnProps & DispatchProps
 
 class PostComponent extends React.Component<Props, State> {
     private replyPostTimeout?: number;
-    private backgroundImageUrl = createRandomPostBackgroundImageUrl();
+    private backgroundImageUrl?: string;
 
     constructor(props: Props) {
         super(props);
         this.state = {
-            selected: false
+            selected: false,
         };
     }
 
     onClick() {
         this.setState({
-            selected: true
+            selected: true,
         });
 
         this.replyPostTimeout = window.setTimeout(() => {
@@ -59,7 +59,7 @@ class PostComponent extends React.Component<Props, State> {
     componentDidUpdate(prevProps: Props) {
         if (prevProps.replyingPost && !this.props.replyingPost && this.state.selected) {
             this.setState({
-                selected: false
+                selected: false,
             });
         }
     }
@@ -69,6 +69,9 @@ class PostComponent extends React.Component<Props, State> {
     }
 
     render() {
+        if (!this.backgroundImageUrl) {
+            this.backgroundImageUrl = createRandomPostBackgroundImageUrl();
+        }
         const narrationItems = [];
 
         for (let i=0; i < this.props.post.narrations!.length; i++) {

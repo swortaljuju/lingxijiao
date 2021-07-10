@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {closePostCreationModalAction} from '../store/reducers';
 import {createPostThunk} from '../store/asyncs';
 import {Modal, Button, Form, Alert, Col, Spinner} from 'react-bootstrap';
-import styles from './post-creation-form.module.scss';
+import postFormStyles from './post-form.module.scss';
 import {RootState, PostData} from '../store/states';
 import {ErrorCode} from '../../common/error_codes';
 import {ThunkDispatch} from 'redux-thunk';
@@ -205,8 +205,8 @@ class PostCreationFormComponent extends React.Component<Props, State> {
         });
 
 
-        return <Alert variant="danger" className={styles['error']}>
-            <Alert.Heading className={styles['error-heading']}>{i18n.t('error.general')}</Alert.Heading>
+        return <Alert variant="danger" className={postFormStyles['error']}>
+            <Alert.Heading className={postFormStyles['error-heading']}>{i18n.t('error.general')}</Alert.Heading>
             <ul>{errorItems}</ul>
         </Alert>;
     }
@@ -280,16 +280,17 @@ class PostCreationFormComponent extends React.Component<Props, State> {
             onEnter={() => this.onModalShow()}
             show={this.props.visible}
             scrollable
-            className={styles['post-creation-modal']}
-            backdrop='static'>
-            <Modal.Header className={styles['header']} closeButton>
-                <Modal.Title >
+            className={postFormStyles['post-modal']}
+            backdrop='static'
+            contentClassName={postFormStyles['modal-content']}>
+            <Modal.Header className={postFormStyles['header']} closeButton>
+                <Modal.Title className={postFormStyles['header-title']}>
                     {i18n.t('postCreationModal.modalHeader')}
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className={styles['body']} ref={this.modalBodyRef}>
+            <Modal.Body className={postFormStyles['body']} ref={this.modalBodyRef}>
                 {this.renderErrors()}
-                <Form id={this.formId} className={styles['form']} noValidate onSubmit={(event: React.FormEvent) => this.onSubmit(event)} >
+                <Form id={this.formId} className={postFormStyles['form']} noValidate onSubmit={(event: React.FormEvent) => this.onSubmit(event)} >
                     <Form.Group controlId={`${this.formId}-email-input-group`}>
                         <Form.Label>{i18n.t('formLabels.email')}</Form.Label>
                         <Form.Control
@@ -324,7 +325,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group as={Col} className={styles['gender-input-group']} controlId={this.genderRadioId}>
+                        <Form.Group as={Col} className={postFormStyles['gender-input-group']} controlId={this.genderRadioId}>
                             <Form.Label>{i18n.t('gender')}</Form.Label>
                             <div>
                                 <Form.Check inline type='radio' name={this.genderRadioId}>
@@ -332,14 +333,14 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                                         checked={this.state.form.gender.value == Gender.MALE}
                                         value='male'
                                         onChange={(event: React.FormEvent<HTMLInputElement>) => this.onGenderChange(event)} />
-                                    <Form.Check.Label><IoMdMale className={styles['male']}/></Form.Check.Label>
+                                    <Form.Check.Label><IoMdMale className={postFormStyles['male']}/></Form.Check.Label>
                                 </Form.Check>
                                 <Form.Check inline type='radio' name={this.genderRadioId}>
                                     <Form.Check.Input type='radio'
                                         checked={this.state.form.gender.value == Gender.FEMALE}
                                         value='female'
                                         onChange={(event: React.FormEvent<HTMLInputElement>) => this.onGenderChange(event)}/>
-                                    <Form.Check.Label><IoMdFemale className={styles['female']}/></Form.Check.Label>
+                                    <Form.Check.Label><IoMdFemale className={postFormStyles['female']}/></Form.Check.Label>
                                 </Form.Check>
                             </div>
                         </Form.Group>
@@ -351,9 +352,9 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                     </Form.Group>
                 </Form>
             </Modal.Body>
-            <Modal.Footer className={styles['footer']}>
-                <Button variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
-                <Button variant="primary" type="submit" form={this.formId} disabled={this.state.isSaving}>
+            <Modal.Footer className={postFormStyles['footer']}>
+                <Button className={postFormStyles['footer-btn']} variant="secondary" onClick={() => this.props.close()}>{i18n.t('modal.close')}</Button>
+                <Button className={postFormStyles['footer-btn']} variant="primary" type="submit" form={this.formId} disabled={this.state.isSaving}>
                     {this.state.isSaving ? (<Spinner animation="border" role="status" size="sm">
                         <span className="sr-only">Loading...</span>
                     </Spinner>) : i18n.t('modal.submit')} </Button>

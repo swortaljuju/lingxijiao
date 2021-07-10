@@ -1,31 +1,7 @@
 @import "global.scss";
 
-$headerFooterBackground: linear-gradient(#ff8e4d,#ffa26d, #ff8e4d);
-.reply-post-modal {
-    .header {
-        padding-top: 0;
-        padding-bottom: 0;
-        background: $headerFooterBackground;
-    }
-    
-    
+.reply-post-modal {    
     .body {
-        background: $red-background;
-
-        .male {
-            color: $maleColor
-        }
-
-        .female {
-            color: $femaleColor
-        }
-
-        .error {
-            &-heading {
-                font-size: 1rem;
-            }
-        }
-
         .original-post {
             font-family: $narrationFontFamily;
 
@@ -47,10 +23,4 @@ $headerFooterBackground: linear-gradient(#ff8e4d,#ffa26d, #ff8e4d);
             }
         }
     }
-
-    .footer {
-        padding-top: 0;
-        padding-bottom: 0;
-        background: $headerFooterBackground;
-    }  
 }
