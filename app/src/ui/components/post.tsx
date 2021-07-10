@@ -18,6 +18,7 @@ function createRandomPostBackgroundImageUrl(): string {
 }
 
 interface State {
+    selected: boolean;
 }
 
 interface OwnProps {
@@ -29,11 +30,44 @@ interface DispatchProps {
 }
 
 interface StateProps {
+    replyingPost: boolean;
 }
 
 type Props = StateProps & OwnProps & DispatchProps
 
 class PostComponent extends React.Component<Props, State> {
+    private replyPostTimeout?: number;
+    private backgroundImageUrl = createRandomPostBackgroundImageUrl();
+
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            selected: false
+        };
+    }
+
+    onClick() {
+        this.setState({
+            selected: true
+        });
+
+        this.replyPostTimeout = window.setTimeout(() => {
+            this.props.replyPost(this.props.post);
+        }, 1000);
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.replyingPost && !this.props.replyingPost && this.state.selected) {
+            this.setState({
+                selected: false
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.replyPostTimeout);
+    }
+
     render() {
         const narrationItems = [];
 
@@ -50,10 +84,10 @@ class PostComponent extends React.Component<Props, State> {
             );
         }
         return (
-            <Card className={styles['post']}
-                onClick={() => this.props.replyPost(this.props.post)}
+            <Card className={`${styles['post']} ${this.state.selected ? styles['selected'] : ''}`}
+                onClick={() => this.onClick()}
                 title={i18n.t('replyPost')}
-                style={{backgroundImage: `url("${createRandomPostBackgroundImageUrl()}")`}}>
+                style={{backgroundImage: `url("${this.backgroundImageUrl}")`}}>
                 <Card.Header className={styles['gender-age-container']}>
                     <div className={styles['gender']}>
                         {(this.props.post.gender == Gender.MALE) ?
@@ -80,5 +114,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>, ownProps: Ow
     };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(null, mapDispatchToProps)(PostComponent);
+const mapStateToProps = (state: RootState): StateProps => {
+    return {
+        replyingPost: Boolean(state.uiStates.replyingPost),
+    };
+};
+
+export default connect<StateProps, DispatchProps, OwnProps, RootState>(mapStateToProps, mapDispatchToProps)(PostComponent);
 

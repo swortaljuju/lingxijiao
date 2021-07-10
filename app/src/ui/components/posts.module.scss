@@ -22,9 +22,19 @@
         background-size: 100% 100%;    
         margin-top: 15px;
         box-shadow:  1px 1px 10px 0 rgba(0, 0, 0, 0.1);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;;
+        transition: transform 1s ease-in;
+        -webkit-transition: transform 1s ease-in;
+        -webkit-transition: -webkit-transform 1s ease-in;
+        transform: rotateY(0deg);
+        -webkit-transform: rotateY(0deg);
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
 
-        &:active {
-            box-shadow:  1px 1px 20px 0 rgba(0, 0, 0, 0.1);
+        &.selected {
+            transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
         }
 
         &:hover {
