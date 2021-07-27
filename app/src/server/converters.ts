@@ -21,6 +21,7 @@ export function fromDbPostToClientPost(post: DocumentType<DbPost>): ClientIPost 
         narrations: post.narrations.map(fromDbPostNarrationToClientPostNarration),
         creationTimestamp: post.createdAt?.valueOf(),
         age: new Date().getFullYear() - post.birthYear,
+        location: post.location,
     };
 }
 

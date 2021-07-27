@@ -6,6 +6,7 @@ export enum ErrorCode {
     INVALID_EMAIL = 'invalid_email',
     POST_RESPONDED = 'post_responded',
     INVALID_AGE = 'invalid_age',
+    EXCEED_MAX_LOCATION_CHARACTERS_NUMBER = 'exceed_max_location_characters_number',
     EXCEED_MAX_NARRATION_CHARACTERS_NUMBER = 'exceed_max_narration_characters_number',
     EXCEED_MAX_QUESTION_CHARACTERS_NUMBER = 'exceed_max_question_characters_number',
     EXCEED_MAX_ANSWER_CHARACTERS_NUMBER = 'exceed_max_answer_characters_number',

@@ -14,12 +14,13 @@ import {IoMdFemale, IoMdMale} from 'react-icons/io';
 import {InputCharCount} from './input-char-count';
 import {BasicFormField, validateBasicFormField, formatSingleFieldErrors} from './forms-utils';
 import {Gender} from '../../proto/common.js';
-import {MAX_ANSWER_CHARACTER_NUMBER} from '../globals';
+import {MAX_ANSWER_CHARACTER_NUMBER, MAX_LOCATION_CHARACTER_NUMBER} from '../globals';
 import {generateId} from '../id-generators';
 
 interface Form {
     email: BasicFormField<string>;
     age: BasicFormField<string>;
+    location: BasicFormField<string>;
     gender: BasicFormField<Gender>;
     answers: BasicFormField<string>[];
 }
@@ -66,6 +67,11 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                     value: '',
                     errors: [],
                 },
+                location: {
+                    label: '',
+                    value: '',
+                    errors: [],
+                },
                 gender: {
                     label: '',
                     value: Gender.MALE,
@@ -91,6 +97,11 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                 value: response.age + '',
                 errors: [],
             },
+            location: {
+                label: '',
+                value: response.location + '',
+                errors: [],
+            },
             gender: {
                 label: '',
                 value: response.gender,
@@ -112,6 +123,7 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             email: form.email.value,
             age: Number(form.age.value),
             gender: form.gender.value,
+            location: form.location.value,
             questionAndAnswers: form.answers.map((answer) => {
                 return {
                     question: answer.label!,
@@ -165,6 +177,11 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
             }
         }) || hasError;
 
+        hasError = validateBasicFormField(form.location, (location: string) => {
+            if (location.length > MAX_LOCATION_CHARACTER_NUMBER) {
+                return [ErrorCode.EXCEED_MAX_LOCATION_CHARACTERS_NUMBER];
+            }
+        }) || hasError;
 
         for (const answer of form.answers) {
             hasError = validateBasicFormField(answer, (answer: string) => {
@@ -350,6 +367,25 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                             </div>
                         </Form.Group>
                     </Form.Row>
+                    <Form.Group controlId={`${this.formId}-location-input-group`}>
+                        <Form.Label>
+                            {i18n.t('formLabels.location')}
+                            <InputCharCount charCount={this.state.form.location.value.length} charLimit={MAX_LOCATION_CHARACTER_NUMBER}/>
+                        </Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={this.state.form.location.value}
+                            onChange={(event) => this.setState((state) => {
+                                const newState: State = Object.assign(state, {});
+                                newState.form.location.value = event.target.value;
+                                return newState;
+                            })}
+                            isInvalid={this.state.form.location.errors.length > 0}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {formatSingleFieldErrors(this.state.form.location.errors)}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                     {this.renderAnswers()}
                 </Form>
             </Modal.Body>

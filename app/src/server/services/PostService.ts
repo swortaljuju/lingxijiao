@@ -73,6 +73,7 @@ postRouter.post('/create', wrapPromiseRoute(async function(req, res, next) {
             posts: [],
             respondedPosts: [],
             birthYear,
+            location: clientPostData.location || '',
         });
     } else if (userDataArray.length > 1) {
         console.error(`Multiple users exist with same email ${clientPostData.email}`);
@@ -94,6 +95,7 @@ postRouter.post('/create', wrapPromiseRoute(async function(req, res, next) {
         // until we support user profile setting.
         gender: dbGender,
         birthYear,
+        location: clientPostData.location || '',
     };
     const createdPost: DocumentType<DbPost> = await PostModel.create(newDbPost);
     // add the new post to user's posts list.
@@ -109,7 +111,7 @@ function formatGender(gender: ClientGender, req: i18nMiddleware.I18NextRequest):
 }
 
 function createResponseEmailContent(post: ClientIPost, clientPostResponse: ClientIResponse, req: i18nMiddleware.I18NextRequest): string {
-    let html = `<div> ${req.t('responseEmail.notice', {email: clientPostResponse.email, gender: formatGender(clientPostResponse.gender, req), age: clientPostResponse.age})}</div><br/>` +
+    let html = `<div> ${req.t('responseEmail.notice', {email: clientPostResponse.email, gender: formatGender(clientPostResponse.gender, req), age: clientPostResponse.age, location: clientPostResponse.location})}</div><br/>` +
     `<b> ${req.t('responseEmail.warning')}</b><br/><br/>`;
 
     if (clientPostResponse.questionAndAnswers) {
@@ -159,6 +161,7 @@ postRouter.post('/reply', wrapPromiseRoute(async function(req, res, next) {
             posts: [],
             respondedPosts: [],
             birthYear,
+            location: clientPostResponse.location,
         });
     } else if (responderDataArray.length > 1) {
         console.error(`Multiple users exist with same email ${clientPostResponse.email}`);

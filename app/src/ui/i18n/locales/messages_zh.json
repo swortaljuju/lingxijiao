@@ -16,6 +16,7 @@
       "invalid_email": "无效的Email",
       "post_responded": "不能重复回复灵犀贴",
       "invalid_age": "无效的年龄",
+      "exceed_max_location_characters_number": "所在地名称长度不得超过{{max}}字",
       "exceed_max_narration_characters_number": "每条灵犀语不得超过{{max}}字",
       "exceed_max_question_characters_number": "每个问题不得超过{{max}}字",
       "exceed_max_answer_characters_number": "每条回答不得超过{{max}}字",
@@ -43,7 +44,8 @@
     },
     "formLabels": {
       "email": "Email",
-      "age": "年龄"
+      "age": "年龄",
+      "location": "所在地"
     },
     "modal": {
       "submit": "提交",

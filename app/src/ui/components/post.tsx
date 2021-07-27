@@ -91,7 +91,7 @@ class PostComponent extends React.Component<Props, State> {
                 onClick={() => this.onClick()}
                 title={i18n.t('replyPost')}
                 style={{backgroundImage: `url("${this.backgroundImageUrl}")`}}>
-                <Card.Header className={styles['gender-age-container']}>
+                <Card.Header className={styles['post-header-container']}>
                     <div className={styles['gender']}>
                         {(this.props.post.gender == Gender.MALE) ?
                             <IoMdMale className={styles['male']}/> :
@@ -99,6 +99,9 @@ class PostComponent extends React.Component<Props, State> {
                     </div>
                     <div>
                         {i18n.t('age', {age: this.props.post.age})}
+                    </div>
+                    <div>
+                        {this.props.post.location}
                     </div>
                 </Card.Header>
                 <ListGroup className={styles['narrations']}>

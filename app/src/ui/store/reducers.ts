@@ -167,6 +167,7 @@ const responseFormDataSlice = createSlice({
             questions: [], 
             email: '',
             gender: Gender.MALE,
+            location: '',
         },
         errors: [],
         response: {
@@ -175,6 +176,7 @@ const responseFormDataSlice = createSlice({
             gender: Gender.MALE,
             questionAndAnswers: [],
             age: 0,
+            location: '',
         },
     } as ResponseFormData,
     reducers: {},
@@ -190,6 +192,7 @@ const responseFormDataSlice = createSlice({
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 postId: post.postId!,
                 email: '',
+                location: '',
                 gender: getOppositeGender(post.gender),
                 questionAndAnswers: post.questions?.map((question) => {
                     return {

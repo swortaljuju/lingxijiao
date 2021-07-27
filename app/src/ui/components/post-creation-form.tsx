@@ -10,7 +10,7 @@ import {ThunkDispatch} from 'redux-thunk';
 import i18n, {formatErrorCode} from '../i18n/config';
 import {BasicFormField, validateBasicFormField, formatSingleFieldErrors} from './forms-utils';
 import {Gender} from '../../proto/common.js';
-import {MAX_NARRATION_CHARACTER_NUMBER, MAX_QUESTION_CHARACTER_NUMBER} from '../globals';
+import {MAX_NARRATION_CHARACTER_NUMBER, MAX_QUESTION_CHARACTER_NUMBER, MAX_LOCATION_CHARACTER_NUMBER} from '../globals';
 import validator from 'validator';
 import {IoMdFemale, IoMdMale} from 'react-icons/io';
 import {InputCharCount} from './input-char-count';
@@ -20,6 +20,7 @@ interface Form {
     email: BasicFormField<string>;
     age: BasicFormField<string>;
     gender: BasicFormField<Gender>;
+    location: BasicFormField<string>;
     narrations: BasicFormField<string>[];
     questions: BasicFormField<string>[];
 }
@@ -71,6 +72,11 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                     value: Gender.MALE,
                     errors: [],
                 },
+                location: {
+                    label: '',
+                    value: '',
+                    errors: [],
+                },
                 narrations: [],
                 questions: [],
             },
@@ -97,6 +103,11 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                 value: post.gender,
                 errors: [],
             },
+            location: {
+                label: '',
+                value: post.location || '',
+                errors: [],
+            },
             narrations: post.narrations?.map((narration) => {
                 return {
                     label: narration.label,
@@ -119,6 +130,7 @@ class PostCreationFormComponent extends React.Component<Props, State> {
             email: form.email.value,
             age: Number(form.age.value),
             gender: form.gender.value,
+            location: form.location.value,
             narrations: form.narrations.map((narration) => {
                 return {
                     label: narration.label!,
@@ -169,6 +181,12 @@ class PostCreationFormComponent extends React.Component<Props, State> {
         hasError = validateBasicFormField(form.age, (age: string) => {
             if (!validator.isInt(age)) {
                 return [ErrorCode.INVALID_AGE];
+            }
+        }) || hasError;
+
+        hasError = validateBasicFormField(form.location, (location: string) => {
+            if (location.length > MAX_LOCATION_CHARACTER_NUMBER) {
+                return [ErrorCode.EXCEED_MAX_LOCATION_CHARACTERS_NUMBER];
             }
         }) || hasError;
 
@@ -345,6 +363,25 @@ class PostCreationFormComponent extends React.Component<Props, State> {
                             </div>
                         </Form.Group>
                     </Form.Row>
+                    <Form.Group controlId={`${this.formId}-location-input-group`}>
+                        <Form.Label>
+                            {i18n.t('formLabels.location')}
+                            <InputCharCount charCount={this.state.form.location.value.length} charLimit={MAX_LOCATION_CHARACTER_NUMBER}/>
+                        </Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={this.state.form.location.value}
+                            onChange={(event) => this.setState((state) => {
+                                const newState: State = Object.assign(state, {});
+                                newState.form.location.value = event.target.value;
+                                return newState;
+                            })}
+                            isInvalid={this.state.form.location.errors.length > 0}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {formatSingleFieldErrors(this.state.form.location.errors)}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                     {this.renderNarrations()}
                     <Form.Group controlId={`${this.formId}-questions`}>
                         <Form.Label>{i18n.t('postCreationModal.yourQuestions')}</Form.Label>

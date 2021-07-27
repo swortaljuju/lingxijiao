@@ -2,7 +2,7 @@
     "responseEmail": {
       "title": "（姻缘墙）DO NOT REPLY. 您有一个回复",
       "warning": "如果回复里包含网络链接，请小心不要乱点，以防被盗取重要账户和密码",
-      "notice": "你收到一个来自 <b> {{email}} 性别: {{gender}}; 年龄： {{age}}; </b> 的回复，如果感兴趣，可以直接联系他。"
+      "notice": "你收到一个来自 <b> {{email}} 性别: {{gender}}; 年龄： {{age}}; 所在地： {{location}};</b> 的回复，如果感兴趣，可以直接联系他。"
     },
     "male": "男",
     "female": "女",

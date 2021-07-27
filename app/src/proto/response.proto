@@ -12,4 +12,5 @@ message Response {
     required Gender gender = 3;
     repeated QuestionAndAnswer questionAndAnswers = 4;   
     required int32 age = 5;
+    required string location = 6;
 }

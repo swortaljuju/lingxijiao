@@ -18,4 +18,5 @@ message Post {
     required Gender gender = 5;
     optional int64 creationTimestamp = 6;
     optional int32 age = 7;
+    optional string location = 8;
 }

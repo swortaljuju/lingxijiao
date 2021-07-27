@@ -19,6 +19,9 @@ export class User {
     @prop({required: true, type: Number})
     public birthYear!: number;
 
+    @prop({type: String})
+    public location?: string;
+
     @prop({ref: () => Post})
     public posts?: Ref<Post>[];
 

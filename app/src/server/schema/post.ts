@@ -42,5 +42,8 @@ export class Post extends TimeStamps {
 
     @prop({required: true, type: Number})
     public birthYear!: number;
+
+    @prop({type: String})
+    public location?: string;
 }
 
