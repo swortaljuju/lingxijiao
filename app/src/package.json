@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "ts-node ./index.ts",
-    "start-dev": "export NODE_OPTIONS=--max_old_space_size=7000 && npm run build-dev && node --inspect ../dist/server/index.js",
+    "start-dev": "npm run build-dev && node --inspect ../dist/server/index.js",
     "start-prod": "npm run build-prod && node --inspect ../dist/server/index.js",
     "build-prod": "webpack --config webpack.prod.ts",
-    "build-dev": "webpack --config webpack.dev.ts"
+    "build-dev": "export NODE_OPTIONS=--max_old_space_size=7000 && webpack --config webpack.dev.ts"
   },
   "author": "",
   "license": "ISC",
