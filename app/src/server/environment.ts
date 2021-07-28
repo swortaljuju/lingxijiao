@@ -32,7 +32,7 @@ export function initializeEnvironment(uiDistPath: string): Environment {
     dotenv.config({
         path: path.resolve(__dirname, '.env'),
     });
-    
+
     const logger = winston.createLogger({
         level: 'info',
         format: winston.format.json(),
@@ -47,7 +47,7 @@ export function initializeEnvironment(uiDistPath: string): Environment {
             }),
         ],
     });
-    
+
     // If we're not in production then log to the `console` with the format:
     // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
     if (process.env.NODE_ENV !== 'production') {
