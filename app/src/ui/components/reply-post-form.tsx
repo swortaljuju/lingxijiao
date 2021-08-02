@@ -275,6 +275,9 @@ class ReplyPostFormComponent extends React.Component<Props, State> {
                             <div className={postFormStyles['age']}>
                                 {i18n.t('age', {age: this.props.post.age})}
                             </div>
+                            <div className={postFormStyles['location']}>
+                                {this.props.post.location}
+                            </div>
                             {narrationItems}
                         </div>
                     </Card.Body>
