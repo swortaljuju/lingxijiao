@@ -1,7 +1,7 @@
 @import "global.scss";
-@import "../../node_modules/bootstrap/scss/functions";
-@import "../../node_modules/bootstrap/scss/variables";
-@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
 
 $genderToggleHeight: 0.60 * $navbarHeight;
 $genderSliderMargin: 0.05 * $genderToggleHeight;

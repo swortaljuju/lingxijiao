@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as nodejieba from 'nodejieba';
 
