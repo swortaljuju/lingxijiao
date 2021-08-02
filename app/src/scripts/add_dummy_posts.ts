@@ -3,7 +3,7 @@
 // eslint-disable-next-line no-unused-vars
 import {Post, PostNarration} from '../server/schema/post';
 // eslint-disable-next-line no-unused-vars
-import { Gender} from '../server/schema/user';
+import {Gender} from '../server/schema/user';
 import {UserModel, PostModel} from '../server/schema/models';
 
 import {DocumentType} from '@typegoose/typegoose';
@@ -34,7 +34,8 @@ const gender = process.argv[5] == 'male' ? Gender.MALE : Gender.FEMALE;
                 for (let k = 0; k < 4; k++) {
                     narrations.push({
                         label: `User ${i} Post ${j} Narration label ${k}`,
-                        content: `User ${i} Post ${j} Narration content ${k}`
+                        content: `User ${i} Post ${j} Narration content ${k}`,
+                        contentTokens: `User ${i} Post ${j} Narration content ${k}`,
                     });
                 }
                 const questions: string[] = [];

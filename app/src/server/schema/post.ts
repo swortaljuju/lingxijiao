@@ -3,13 +3,16 @@ import {TimeStamps} from '@typegoose/typegoose/lib/defaultClasses';
 import {User, Gender} from './user';
 
 /** Post narration shown on front card. */
-@index({content: 'text'})
 export class PostNarration {
     @prop({required: true})
     public label!: string;
 
     @prop({required: true})
     public content!: string;
+
+    // Store tokenized content so that Chinese text can be correctly indexed.
+    @prop({required: true})
+    public contentTokens!: string;
 }
 
 /** Response to the post. */
@@ -22,7 +25,7 @@ export class PostResponse {
 }
 
 /** A post */
-@index({questions: 'text'})
+@index({'location': 'text', 'narrations.contentTokens': 'text'})
 export class Post extends TimeStamps {
     @prop({required: true, ref: () => User})
     public poster!: Ref<User>;

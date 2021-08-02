@@ -1,11 +1,15 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import * as path from 'path';
-
+import * as nodejieba from 'nodejieba';
 
 export function setupEnv(env: string) {
     dotenv.config({
         path: path.resolve(__dirname, '../server/', env == 'prod' ? '.env' : '.env.dev'),
+    });
+    nodejieba.load({
+        dict: path.resolve(__dirname, '../server/resources', 'jieba.dict.utf8'),
+        idfDict: path.resolve(__dirname, '../server/resources', 'idf.utf8'),
     });
 }
 

@@ -6,11 +6,11 @@ import {Post as DbPost} from '../schema/post';
 import {User} from '../schema/user';
 import {UserModel, PostModel} from '../schema/models';
 import {Gender as ClientGender} from '../../proto/common.js';
-import {Post as ClientPost, IPost as ClientIPost} from '../../proto/post.js';
+import {Post as ClientPost, IPost as ClientIPost, INarration as ClientIPostNarration} from '../../proto/post.js';
 import {Response as ClientPostResponse, IResponse as ClientIResponse} from '../../proto/response.js';
 import {PostQuery} from '../../proto/query.js';
 import {ErrorCode} from '../../common/error_codes';
-import {fromClientGenderToDbGender, fromDbPostToClientPost} from '../converters';
+import {fromClientGenderToDbGender, fromDbPostToClientPost, fromClientPostNarrationToDbPostNarration} from '../converters';
 
 // This is lib is deprecated but it contains a released d.ts
 // while the new lib i18next-http-middleware's d.ts was recently added and not released yet.
@@ -34,7 +34,7 @@ postRouter.post('/load', wrapPromiseRoute(async function(req, res, next) {
 
     if (queryData.searchKeyword) {
         dbQuery.and([{$text: {
-            $search: queryData.searchKeyword, 
+            $search: queryData.searchKeyword,
             // Use none to support chinese text search.
             $language: 'none'}}]);
     }
@@ -88,7 +88,9 @@ postRouter.post('/create', wrapPromiseRoute(async function(req, res, next) {
     }
     const newDbPost: CreateQuery<DbPost> = {
         poster: userData._id,
-        narrations: clientPostData.narrations!,
+        narrations: clientPostData.narrations!.map(
+            (narration: ClientIPostNarration) =>
+                fromClientPostNarrationToDbPostNarration(narration)),
         questions: clientPostData.questions!,
         responses: [],
         // Always use post's gender and age even when it doesn't match user's initial value

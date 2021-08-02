@@ -32,6 +32,10 @@ export function commonServerConfig(): webpack.Configuration {
                 },
             ],
         },
+        // Nodejieba is not compatible with webpack and will throw error in both build time and runtime.
+        // So instead of building it into index.js, just leave it in node_modules/ and import it as an
+        // external library.
+        externals: {'nodejieba': 'commonjs nodejieba'},
         resolve: {
             extensions: ['.tsx', '.ts', '.js'],
         },
@@ -40,6 +44,15 @@ export function commonServerConfig(): webpack.Configuration {
             new WebpackProtobufComiplerPlugin(),
             new webpack.DefinePlugin({
                 'UI_DIST_PATH': JSON.stringify(UI_DIST_PATH),
+            }),
+            new CopyPlugin({
+                patterns: [
+                    {
+                        from: path.resolve(__dirname, 'server', 'resources'),
+                        to: SERVER_OUTPUT_DIR,
+                        toType: 'dir',
+                    },
+                ],
             }),
         ],
     };

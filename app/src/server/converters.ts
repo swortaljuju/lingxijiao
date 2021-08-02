@@ -3,6 +3,7 @@ import {Gender as DbGender} from './schema/user';
 import {Post as DbPost, PostNarration as DbPostNarration} from './schema/post';
 import {IPost as ClientIPost, INarration as ClientIPostNarration, Post as ClientPost, Narration as ClientPostNarration} from '../proto/post.js';
 import {DocumentType} from '@typegoose/typegoose';
+import * as nodejieba from 'nodejieba';
 
 
 export function fromDbGenderToClientGender(gender: DbGender): ClientGender {
@@ -29,5 +30,13 @@ export function fromDbPostNarrationToClientPostNarration(narration: DbPostNarrat
     return {
         label: narration.label,
         content: narration.content,
+    };
+}
+
+export function fromClientPostNarrationToDbPostNarration(narration: ClientIPostNarration): DbPostNarration {
+    return {
+        label: narration.label,
+        content: narration.content,
+        contentTokens: nodejieba.cutForSearch(narration.content, true).join(' '),
     };
 }

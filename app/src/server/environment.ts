@@ -13,13 +13,14 @@ import i18next from 'i18next';
 import {resources} from './i18n/config';
 import winston from 'winston';
 import 'winston-daily-rotate-file';
+import * as nodejieba from 'nodejieba';
 
 
 interface Environment {
     app: express.Application;
     logger: winston.Logger;
     db: mongoose.Connection;
-    transporter: nodemailer.Transporter
+    transporter: nodemailer.Transporter;
 }
 
 
@@ -31,6 +32,11 @@ export function initializeEnvironment(uiDistPath: string): Environment {
     }
     dotenv.config({
         path: path.resolve(__dirname, '.env'),
+    });
+
+    nodejieba.load({
+        dict: path.resolve(__dirname, 'jieba.dict.utf8'),
+        idfDict: path.resolve(__dirname, 'idf.utf8'),
     });
 
     const logger = winston.createLogger({
