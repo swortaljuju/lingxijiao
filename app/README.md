@@ -1,8 +1,9 @@
 # Overview
 灵犀角 is social media for people to know each other and start a love relationship through short but inspiring posts and answers. 
 
-[Design doc](design_doc.md);
-[Tech stack](tech_stacks.md);
+[Design doc](design_doc.md);  
+[Tech stack](tech_stacks.md);  
+[Demo](www.lingxijiao.com)
 
 # Project setup
 Clone the repo and do a `npm install`.
