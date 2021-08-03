@@ -3,7 +3,7 @@
 
 [Design doc](design_doc.md);  
 [Tech stack](tech_stacks.md);  
-[Demo](www.lingxijiao.com)
+[Demo](http://www.lingxijiao.com)
 
 # Project setup
 Clone the repo and do a `npm install`.
